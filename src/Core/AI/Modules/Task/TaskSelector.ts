@@ -1,7 +1,6 @@
 import { CoreAI_Brain } from '../../Brain'
 import { CoreAI_AProfile } from '../../Profiles/AProfile'
 import { CoreAI_IdleBehavior } from '../Behavior/Behaviors/IdleBehavior'
-import { CoreAI_MoveToBehavior } from '../Behavior/Behaviors/MoveToBehavior'
 import { CoreAI_ITaskScoringEntry } from './ITaskScoringEntry'
 
 export class CoreAI_TaskSelector {
@@ -41,27 +40,19 @@ export class CoreAI_TaskSelector {
             return new CoreAI_IdleBehavior(this.brain)
         }
 
-        // TEMP instance only to inspect class
-        const temp = bestEntry.factory(this.brain)
-        const nextClass = temp.constructor
+        const behaviorClass = bestEntry.behaviorClass?.(this.brain)
 
-        // If same class -> don't switch (no restarts), except MoveTo when target changes.
-        if (current && current.constructor === nextClass) {
-            if (
-                current instanceof CoreAI_MoveToBehavior &&
-                temp instanceof CoreAI_MoveToBehavior
-            ) {
-                const currentPos = current.getTargetPos()
-                const nextPos = temp.getTargetPos()
-                if (mod.DistanceBetween(currentPos, nextPos) <= 0) {
-                    return current
-                }
-            } else {
+        if (behaviorClass && current && current.constructor === behaviorClass) {
+            const keepCurrent = bestEntry.isSame
+                ? bestEntry.isSame(this.brain, current)
+                : true
+
+            if (keepCurrent) {
                 return current
             }
         }
 
         // Switch to new instance
-        return temp
+        return bestEntry.factory(this.brain)
     }
 }
