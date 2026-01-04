@@ -26,8 +26,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     const m = brain.memory
                     return m.get('isInBattle') ? 200 : 0
                 },
-                factory: (brain) =>
-                    new CoreAI_FightBehavior(brain, this.getMoveMode(brain)),
+                factory: (brain) => new CoreAI_FightBehavior(brain),
             },
 
             {
@@ -42,8 +41,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     return new CoreAI_MoveToBehavior(
                         brain,
                         pos,
-                        mod.MoveSpeed.InvestigateRun,
-                        this.getMoveMode(brain)
+                        mod.MoveSpeed.InvestigateRun
                     )
                 },
             },
@@ -77,8 +75,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                         Math.random() < 0.7
                             ? mod.MoveSpeed.Sprint
                             : mod.MoveSpeed.Run,
-                        'onFoot',
-                        2.0,
                         false
                     )
                 },
@@ -98,41 +94,18 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
             {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
                 factory: (brain) => {
-                    const mode = this.getMoveMode(brain)
-
                     return new CoreAI_MoveToBehavior(
                         brain,
                         brain.memory.get('roamPos')!,
                         Math.random() < 0.3
                             ? mod.MoveSpeed.Sprint
-                            : mod.MoveSpeed.Run,
-                        mode,
-                        mode === 'onFoot' ? 3.0 : 6.0
+                            : mod.MoveSpeed.Run
                     )
                 },
             },
         ] as CoreAI_ITaskScoringEntry[]
 
         this.buildSensors(options)
-    }
-
-    /**
-     *
-     */
-
-    protected getMoveMode(brain: { player: mod.Player }): 'onFoot' | 'onDrive' {
-        const player = brain.player
-        if (!mod.IsPlayerValid(player)) return 'onFoot'
-
-        if (!mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle)) {
-            return 'onFoot'
-        }
-
-        if (mod.GetPlayerVehicleSeat(player) === 0) {
-            return 'onDrive'
-        }
-
-        return 'onFoot'
     }
 
     /**

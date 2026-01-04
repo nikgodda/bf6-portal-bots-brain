@@ -17,23 +17,17 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
     private roamPos: mod.Vector
     private readonly speed: mod.MoveSpeed
-    private readonly mode: CoreAI_BehaviorMode
-    private readonly arrivalDist: number
     private readonly isValidated: boolean
 
     constructor(
         brain: CoreAI_Brain,
         pos: mod.Vector,
         speed: mod.MoveSpeed = mod.MoveSpeed.Run,
-        mode: CoreAI_BehaviorMode = 'onFoot',
-        arrivalDist: number = 3,
         isValidated: boolean = true
     ) {
         super(brain)
         this.roamPos = pos
         this.speed = speed
-        this.mode = mode
-        this.arrivalDist = arrivalDist
         this.isValidated = isValidated
     }
 
@@ -47,7 +41,10 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
             return
         }
 
-        if (this.mode === 'onDrive') {
+        if (
+            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
+            mod.GetPlayerVehicleSeat(player) === 0
+        ) {
             this.enterOnDriveMove(player)
             return
         }
@@ -91,9 +88,8 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
         const myPos = mod.GetObjectPosition(player)
         const dist = mod.DistanceBetween(myPos, this.roamPos)
-        const arrivalDist = this.arrivalDist
 
-        if (dist < arrivalDist) {
+        if (dist < 3) {
             this.brain.memory.set('roamPos', null)
         }
     }
