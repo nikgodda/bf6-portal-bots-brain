@@ -25,14 +25,40 @@ if (hadLocalChanges) {
     stashed = true;
 }
 
-let exitCode = run('git', [
+let exitCode = run('git', ['fetch', 'coreai']);
+if (exitCode !== 0) {
+    process.exit(exitCode);
+}
+
+const splitSha = capture('git', [
     'subtree',
-    'pull',
+    'split',
     '--prefix=src/Core/AI',
-    'coreai',
-    'main',
-    '--squash',
+    'coreai/main',
 ]);
+
+const hasSubtree =
+    spawnSync('git', ['cat-file', '-e', 'HEAD:src/Core/AI']).status === 0;
+
+if (hasSubtree) {
+    exitCode = run('git', [
+        'subtree',
+        'pull',
+        '--prefix=src/Core/AI',
+        '.',
+        splitSha,
+        '--squash',
+    ]);
+} else {
+    exitCode = run('git', [
+        'subtree',
+        'add',
+        '--prefix=src/Core/AI',
+        '.',
+        splitSha,
+        '--squash',
+    ]);
+}
 
 if (exitCode === 0) {
     exitCode = run('node', ['scripts/update-coreai-brain.js']);
