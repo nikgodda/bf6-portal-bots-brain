@@ -2347,7 +2347,7 @@ function setBrain(player: mod.Player, brain: CoreAI_Brain): void {
  */
 
 // This will trigger at the start of the gamemode.
-export function OnGameModeStarted() {
+export function OnGameModeStarted(): void {
     mod.Wait(10).then(() => {
         spawnCustomBot(mod.GetTeam(1), mod.GetObjectPosition(mod.GetHQ(1)))
         spawnCustomBot(mod.GetTeam(2), mod.GetObjectPosition(mod.GetHQ(2)))
@@ -2355,7 +2355,7 @@ export function OnGameModeStarted() {
 }
 
 // This will trigger when a Player joins the game.
-export function OnPlayerJoinGame(eventPlayer: mod.Player) {
+export function OnPlayerJoinGame(eventPlayer: mod.Player): void {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
         setBrain(
             eventPlayer,
@@ -2369,7 +2369,7 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player) {
 }
 
 // This will trigger when any player leaves the game.
-export function OnPlayerLeaveGame(eventNumber: number) {
+export function OnPlayerLeaveGame(eventNumber: number): void {
     // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or check my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
     const brain = brainManager.get(eventNumber)
     if (brain) {
@@ -2377,7 +2377,7 @@ export function OnPlayerLeaveGame(eventNumber: number) {
 }
 
 // This will trigger whenever a Player deploys.
-export function OnPlayerDeployed(eventPlayer: mod.Player) {
+export function OnPlayerDeployed(eventPlayer: mod.Player): void {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
         const brain = getBrain(eventPlayer)
         if (brain) {
@@ -2387,7 +2387,7 @@ export function OnPlayerDeployed(eventPlayer: mod.Player) {
 }
 
 //
-export function OngoingPlayer(eventPlayer: mod.Player) {
+export function OngoingPlayer(eventPlayer: mod.Player): void {
     const brain = getBrain(eventPlayer)
     if (brain) {
         brain.OngoingPlayer()
@@ -2399,7 +2399,7 @@ export function OnPlayerEnterVehicleSeat(
     eventPlayer: mod.Player,
     eventVehicle: mod.Vehicle,
     eventSeat: mod.Object
-) {
+): void {
     if (
         mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier) &&
         mod.GetPlayerVehicleSeat(eventPlayer) === 0
@@ -2415,7 +2415,7 @@ export function OnPlayerEnterVehicleSeat(
 export function OnPlayerExitVehicle(
     eventPlayer: mod.Player,
     eventVehicle: mod.Vehicle
-) {
+): void {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
         const brain = getBrain(eventPlayer)
         if (brain) {
@@ -2430,7 +2430,7 @@ export function OnPlayerDamaged(
     eventOtherPlayer: mod.Player,
     eventDamageType: mod.DamageType,
     eventWeaponUnlock: mod.WeaponUnlock
-) {
+): void {
     const brain = getBrain(eventPlayer)
     if (brain) {
         brain.OnPlayerDamaged(
@@ -2446,7 +2446,7 @@ export function OnRayCastHit(
     eventPlayer: mod.Player,
     eventPoint: mod.Vector,
     eventNormal: mod.Vector
-) {
+): void {
     const brain = getBrain(eventPlayer)
     if (brain) {
         brain.OnRayCastHit(eventPoint, eventNormal)
@@ -2468,7 +2468,7 @@ function getRangeWPs(from: number, to: number): mod.Vector[] {
     return out
 }
 
-function spawnCustomBot(team: mod.Team, pos: mod.Vector) {
+function spawnCustomBot(team: mod.Team, pos: mod.Vector): void {
     const spawner = mod.SpawnObject(
         mod.RuntimeSpawn_Common.AI_Spawner,
         pos,
