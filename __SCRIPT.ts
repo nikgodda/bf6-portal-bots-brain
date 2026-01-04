@@ -2460,6 +2460,7 @@ export function OnPlayerLeaveGame(eventNumber: number) {
     }
 }
 
+// This will trigger whenever a Player deploys.
 export function OnPlayerDeployed(eventPlayer: mod.Player) {
     if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
         const brain = getBrain(eventPlayer)
