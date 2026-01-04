@@ -1,6 +1,6 @@
 {
   "name": "bf6-portal-bots-brain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "devDependencies": {
     "typescript": "^5.5.0"
