@@ -204,14 +204,4 @@ export class CoreAI_Brain {
 
         this.behaviorController.update()
     }
-
-    /* ------------------------------------------------------------
-     * Cleanup
-     * ------------------------------------------------------------ */
-
-    destroy(): void {
-        this.memory.reset()
-        this.behaviorController.resetAll()
-        this.perception.clearSensors()
-    }
 }
