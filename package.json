@@ -6,7 +6,6 @@
     "typescript": "^5.5.0"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json",
     "update-coreai-brain": "node scripts/update-coreai-brain.js",
     "update-coreai": "node scripts/update-coreai.js"
   }

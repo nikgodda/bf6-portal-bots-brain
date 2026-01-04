@@ -7,7 +7,7 @@
     "noEmit": true
   },
   "include": [
-    "__AISCRIPT.ts",
+    "__SCRIPT.ts",
     "src/**/*.ts",
     "SDK/mod/index.d.ts"
   ]
