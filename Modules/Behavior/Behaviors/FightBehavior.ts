@@ -12,11 +12,8 @@ import { CoreAI_BehaviorMode } from '../BehaviorController'
 export class CoreAI_FightBehavior extends CoreAI_ABehavior {
     public name = 'fight'
 
-    private readonly mode: CoreAI_BehaviorMode
-
     constructor(brain: CoreAI_Brain, mode: CoreAI_BehaviorMode = 'onFoot') {
         super(brain)
-        this.mode = mode
     }
 
     override async enter(): Promise<void> {
@@ -25,7 +22,10 @@ export class CoreAI_FightBehavior extends CoreAI_ABehavior {
             return
         }
 
-        if (this.mode === 'onDrive') {
+        if (
+            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
+            mod.GetPlayerVehicleSeat(player) === 0
+        ) {
             const vehicle = mod.GetVehicleFromPlayer(player)
             if (!vehicle) return
 

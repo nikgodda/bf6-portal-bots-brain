@@ -147,7 +147,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
             mod.RayCast(player, startPos, targetPos)
 
             /**
-             * 
+             *
              */
             /* mod.EnableWorldIconImage(this.startWI, true)
             mod.SetWorldIconPosition(this.startWI, startPos)
@@ -166,7 +166,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         if (!mod.IsPlayerValid(player)) return
 
         /**
-         * 
+         *
          */
         /* mod.EnableWorldIconImage(this.hitWI, true)
         mod.SetWorldIconPosition(this.hitWI, eventPoint) */

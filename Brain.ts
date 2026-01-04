@@ -6,7 +6,6 @@ import { CoreAI_TaskSelector } from './Modules/Task/TaskSelector'
 import { CoreAI_AProfile } from './Profiles/AProfile'
 import { CoreAI_ASensor } from './Modules/Perception/Sensors/ASensor'
 import { CoreAI_DebugWI } from './Modules/Debug/DebugWI'
-import { CoreAI_IBrainEvents } from './IBrainEvents'
 import { CoreAI_FightSensor } from './Modules/Perception/Sensors/FightSensor'
 import { CoreAI_SensorContext } from './Modules/Perception/Sensors/SensorContext'
 
@@ -40,7 +39,6 @@ export class CoreAI_Brain {
     public taskSelector: CoreAI_TaskSelector
 
     private debugWI: CoreAI_DebugWI | null = null
-    private listeners: CoreAI_IBrainEvents[] = []
 
     constructor(
         player: mod.Player,
@@ -106,8 +104,6 @@ export class CoreAI_Brain {
      * Player lifecycle hooks (called by BrainComponent)
      * ------------------------------------------------------------ */
 
-    onDeployed(): void {}
-
     reset(): void {
         this.perception.reset()
         this.memory.reset()
@@ -118,22 +114,19 @@ export class CoreAI_Brain {
         }
     }
 
-    onUndeploy(): void {}
-
     /* ------------------------------------------------------------
      * Movement finished
      * ------------------------------------------------------------ */
 
-    onMoveFinished(success: boolean): void {
+    OnAIMoveFinished(success: boolean): void {
         this.memory.set('roamPos', null)
-        this.emit('OnMoveFinished', success)
     }
 
     /* ------------------------------------------------------------
      * Damage event
      * ------------------------------------------------------------ */
 
-    onDamaged(
+    OnPlayerDamaged(
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock
@@ -159,7 +152,7 @@ export class CoreAI_Brain {
      * Raycast hit event
      * ------------------------------------------------------------ */
 
-    onRayCastHit(eventPoint: mod.Vector, eventNormal: mod.Vector): void {
+    OnRayCastHit(eventPoint: mod.Vector, eventNormal: mod.Vector): void {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
@@ -176,18 +169,19 @@ export class CoreAI_Brain {
      * Tick (called by BrainComponent)
      * ------------------------------------------------------------ */
 
-    tick(): void {
-        this.debugWI?.update()
+    OngoingPlayer(): void {
+        if (!mod.IsPlayerValid(this.player)) {
+            return
+        }
 
         this.memory.time = Date.now()
         this.memory.prune()
 
-        if (
-            !mod.IsPlayerValid(this.player) ||
-            !mod.GetSoldierState(this.player, mod.SoldierStateBool.IsAlive)
-        ) {
+        if (!mod.GetSoldierState(this.player, mod.SoldierStateBool.IsAlive)) {
             return
         }
+
+        this.debugWI?.update()
 
         const enemy = this.memory.get('closestEnemy')
         if (enemy && mod.IsPlayerValid(enemy)) {
@@ -204,15 +198,9 @@ export class CoreAI_Brain {
 
         this.perception.update(sensorCtx)
 
-        const before = this.behaviorController.currentBehavior()
         const next = this.taskSelector.chooseNextBehavior()
 
         this.behaviorController.change(next)
-
-        const after = this.behaviorController.currentBehavior()
-        if (after !== before) {
-            this.emit('OnBehaviorChanged', before, after)
-        }
 
         this.behaviorController.update()
     }
@@ -225,29 +213,5 @@ export class CoreAI_Brain {
         this.memory.reset()
         this.behaviorController.resetAll()
         this.perception.clearSensors()
-    }
-
-    /* ------------------------------------------------------------
-     * Brain event system
-     * ------------------------------------------------------------ */
-
-    addListener(listener: CoreAI_IBrainEvents): void {
-        this.listeners.push(listener)
-    }
-
-    removeListener(listener: CoreAI_IBrainEvents): void {
-        this.listeners = this.listeners.filter((l) => l !== listener)
-    }
-
-    emit<E extends keyof CoreAI_IBrainEvents>(
-        event: E,
-        ...args: Parameters<NonNullable<CoreAI_IBrainEvents[E]>>
-    ): void {
-        for (const listener of this.listeners) {
-            const fn = listener[event]
-            if (typeof fn === 'function') {
-                ;(fn as (...a: any[]) => void)(...args)
-            }
-        }
     }
 }
