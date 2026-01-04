@@ -223,7 +223,6 @@ export abstract class CoreAI_ASensor {
 
 // src/Core/AI/Modules/Perception/Perception.ts
 
-
 /**
  * Perception:
  * Holds sensors, updates them every tick.
@@ -352,7 +351,7 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 
     override enter(): void {
         const player = this.brain.player
-        
+
         if (mod.IsPlayerValid(player)) {
             mod.AIIdleBehavior(player)
         }
@@ -369,7 +368,6 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 }
 
 // src/Core/AI/Modules/Behavior/BehaviorController.ts
-
 
 export type CoreAI_BehaviorMode = 'onFoot' | 'onDrive'
 
@@ -434,7 +432,6 @@ export class CoreAI_BehaviorController {
 }
 
 // src/Core/AI/Modules/Task/ITaskScoringEntry.ts
-
 
 /**
  * CoreAI_ITaskScoringEntry:
@@ -1109,7 +1106,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
             mod.RayCast(player, startPos, targetPos)
 
             /**
-             * 
+             *
              */
             /* mod.EnableWorldIconImage(this.startWI, true)
             mod.SetWorldIconPosition(this.startWI, startPos)
@@ -1128,7 +1125,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         if (!mod.IsPlayerValid(player)) return
 
         /**
-         * 
+         *
          */
         /* mod.EnableWorldIconImage(this.hitWI, true)
         mod.SetWorldIconPosition(this.hitWI, eventPoint) */
@@ -2434,6 +2431,14 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player) {
                 ENABLE_BOTS_BRAIN_DEBUG
             )
         )
+    }
+}
+
+// This will trigger when any player leaves the game.
+export function OnPlayerLeaveGame(eventNumber: number) {
+    // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or use my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
+    const brain = brainManager.get(eventNumber)
+    if (brain) {
     }
 }
 
