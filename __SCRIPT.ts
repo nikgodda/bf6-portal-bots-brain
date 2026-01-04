@@ -223,6 +223,7 @@ export abstract class CoreAI_ASensor {
 
 // src/Core/AI/Modules/Perception/Perception.ts
 
+
 /**
  * Perception:
  * Holds sensors, updates them every tick.
@@ -351,7 +352,7 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 
     override enter(): void {
         const player = this.brain.player
-
+        
         if (mod.IsPlayerValid(player)) {
             mod.AIIdleBehavior(player)
         }
@@ -368,6 +369,7 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 }
 
 // src/Core/AI/Modules/Behavior/BehaviorController.ts
+
 
 export type CoreAI_BehaviorMode = 'onFoot' | 'onDrive'
 
@@ -433,6 +435,7 @@ export class CoreAI_BehaviorController {
 
 // src/Core/AI/Modules/Task/ITaskScoringEntry.ts
 
+
 /**
  * CoreAI_ITaskScoringEntry:
  * - score(brain): returns utility score for this behavior.
@@ -446,9 +449,7 @@ export class CoreAI_BehaviorController {
  */
 export interface CoreAI_ITaskScoringEntry {
     score: (brain: CoreAI_Brain) => number
-    behaviorClass?: (
-        brain: CoreAI_Brain
-    ) => new (...args: any[]) => CoreAI_ABehavior
+    behaviorClass?: (brain: CoreAI_Brain) => new (...args: any[]) => CoreAI_ABehavior
     isSame?: (brain: CoreAI_Brain, current: CoreAI_ABehavior) => boolean
     factory: (brain: CoreAI_Brain) => CoreAI_ABehavior
 }
@@ -2212,7 +2213,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
                 behaviorClass: () => CoreAI_MoveToBehavior,
                 isSame: (brain, current) => {
-                    mod.DisplayHighlightedWorldLogMessage(mod.Message(1))
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
 
@@ -2225,7 +2225,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     )
                 },
                 factory: (brain) => {
-                    mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
                     return new CoreAI_MoveToBehavior(
                         brain,
                         brain.memory.get('roamPos')!,
