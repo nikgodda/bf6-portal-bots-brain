@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2019", "DOM"],
+    "noEmit": true
+  },
+  "include": [
+    "__AISCRIPT.ts",
+    "src/**/*.ts",
+    "SDK/mod/index.d.ts"
+  ]
+}
