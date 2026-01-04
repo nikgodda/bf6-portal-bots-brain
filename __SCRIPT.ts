@@ -223,7 +223,6 @@ export abstract class CoreAI_ASensor {
 
 // src/Core/AI/Modules/Perception/Perception.ts
 
-
 /**
  * Perception:
  * Holds sensors, updates them every tick.
@@ -352,7 +351,7 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 
     override enter(): void {
         const player = this.brain.player
-        
+
         if (mod.IsPlayerValid(player)) {
             mod.AIIdleBehavior(player)
         }
@@ -369,7 +368,6 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 }
 
 // src/Core/AI/Modules/Behavior/BehaviorController.ts
-
 
 export type CoreAI_BehaviorMode = 'onFoot' | 'onDrive'
 
@@ -434,7 +432,6 @@ export class CoreAI_BehaviorController {
 }
 
 // src/Core/AI/Modules/Task/ITaskScoringEntry.ts
-
 
 /**
  * CoreAI_ITaskScoringEntry:
@@ -543,23 +540,17 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
     private roamPos: mod.Vector
     private readonly speed: mod.MoveSpeed
-    private readonly mode: CoreAI_BehaviorMode
-    private readonly arrivalDist: number
     private readonly isValidated: boolean
 
     constructor(
         brain: CoreAI_Brain,
         pos: mod.Vector,
         speed: mod.MoveSpeed = mod.MoveSpeed.Run,
-        mode: CoreAI_BehaviorMode = 'onFoot',
-        arrivalDist: number = 3,
         isValidated: boolean = true
     ) {
         super(brain)
         this.roamPos = pos
         this.speed = speed
-        this.mode = mode
-        this.arrivalDist = arrivalDist
         this.isValidated = isValidated
     }
 
@@ -573,7 +564,10 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
             return
         }
 
-        if (this.mode === 'onDrive') {
+        if (
+            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
+            mod.GetPlayerVehicleSeat(player) === 0
+        ) {
             this.enterOnDriveMove(player)
             return
         }
@@ -617,9 +611,8 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
         const myPos = mod.GetObjectPosition(player)
         const dist = mod.DistanceBetween(myPos, this.roamPos)
-        const arrivalDist = this.arrivalDist
 
-        if (dist < arrivalDist) {
+        if (dist < 3) {
             this.brain.memory.set('roamPos', null)
         }
     }
@@ -958,12 +951,6 @@ export class CoreAI_DebugWI {
     }
 }
 
-export interface CoreAI_IBrainEvents {
-    // Lifecycle
-    OnMoveFinished?(success: boolean): void
-    OnBehaviorChanged?(previous: CoreAI_ABehavior, next: CoreAI_ABehavior): void
-}
-
 /**
  * FightSensor:
  * Detects combat by raycasting toward nearby enemies.
@@ -1109,7 +1096,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
             mod.RayCast(player, startPos, targetPos)
 
             /**
-             * 
+             *
              */
             /* mod.EnableWorldIconImage(this.startWI, true)
             mod.SetWorldIconPosition(this.startWI, startPos)
@@ -1128,7 +1115,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         if (!mod.IsPlayerValid(player)) return
 
         /**
-         * 
+         *
          */
         /* mod.EnableWorldIconImage(this.hitWI, true)
         mod.SetWorldIconPosition(this.hitWI, eventPoint) */
@@ -1213,7 +1200,6 @@ export class CoreAI_Brain {
     public taskSelector: CoreAI_TaskSelector
 
     private debugWI: CoreAI_DebugWI | null = null
-    private listeners: CoreAI_IBrainEvents[] = []
 
     constructor(
         player: mod.Player,
@@ -1279,8 +1265,6 @@ export class CoreAI_Brain {
      * Player lifecycle hooks (called by BrainComponent)
      * ------------------------------------------------------------ */
 
-    onDeployed(): void {}
-
     reset(): void {
         this.perception.reset()
         this.memory.reset()
@@ -1291,22 +1275,19 @@ export class CoreAI_Brain {
         }
     }
 
-    onUndeploy(): void {}
-
     /* ------------------------------------------------------------
      * Movement finished
      * ------------------------------------------------------------ */
 
-    onMoveFinished(success: boolean): void {
+    OnAIMoveFinished(success: boolean): void {
         this.memory.set('roamPos', null)
-        this.emit('OnMoveFinished', success)
     }
 
     /* ------------------------------------------------------------
      * Damage event
      * ------------------------------------------------------------ */
 
-    onDamaged(
+    OnPlayerDamaged(
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock
@@ -1332,7 +1313,7 @@ export class CoreAI_Brain {
      * Raycast hit event
      * ------------------------------------------------------------ */
 
-    onRayCastHit(eventPoint: mod.Vector, eventNormal: mod.Vector): void {
+    OnRayCastHit(eventPoint: mod.Vector, eventNormal: mod.Vector): void {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
@@ -1349,18 +1330,19 @@ export class CoreAI_Brain {
      * Tick (called by BrainComponent)
      * ------------------------------------------------------------ */
 
-    tick(): void {
-        this.debugWI?.update()
+    OngoingPlayer(): void {
+        if (!mod.IsPlayerValid(this.player)) {
+            return
+        }
 
         this.memory.time = Date.now()
         this.memory.prune()
 
-        if (
-            !mod.IsPlayerValid(this.player) ||
-            !mod.GetSoldierState(this.player, mod.SoldierStateBool.IsAlive)
-        ) {
+        if (!mod.GetSoldierState(this.player, mod.SoldierStateBool.IsAlive)) {
             return
         }
+
+        this.debugWI?.update()
 
         const enemy = this.memory.get('closestEnemy')
         if (enemy && mod.IsPlayerValid(enemy)) {
@@ -1377,15 +1359,9 @@ export class CoreAI_Brain {
 
         this.perception.update(sensorCtx)
 
-        const before = this.behaviorController.currentBehavior()
         const next = this.taskSelector.chooseNextBehavior()
 
         this.behaviorController.change(next)
-
-        const after = this.behaviorController.currentBehavior()
-        if (after !== before) {
-            this.emit('OnBehaviorChanged', before, after)
-        }
 
         this.behaviorController.update()
     }
@@ -1398,30 +1374,6 @@ export class CoreAI_Brain {
         this.memory.reset()
         this.behaviorController.resetAll()
         this.perception.clearSensors()
-    }
-
-    /* ------------------------------------------------------------
-     * Brain event system
-     * ------------------------------------------------------------ */
-
-    addListener(listener: CoreAI_IBrainEvents): void {
-        this.listeners.push(listener)
-    }
-
-    removeListener(listener: CoreAI_IBrainEvents): void {
-        this.listeners = this.listeners.filter((l) => l !== listener)
-    }
-
-    emit<E extends keyof CoreAI_IBrainEvents>(
-        event: E,
-        ...args: Parameters<NonNullable<CoreAI_IBrainEvents[E]>>
-    ): void {
-        for (const listener of this.listeners) {
-            const fn = listener[event]
-            if (typeof fn === 'function') {
-                ;(fn as (...a: any[]) => void)(...args)
-            }
-        }
     }
 }
 
@@ -1570,11 +1522,8 @@ export class CoreAI_EnterVehicleBehavior extends CoreAI_ABehavior {
 export class CoreAI_FightBehavior extends CoreAI_ABehavior {
     public name = 'fight'
 
-    private readonly mode: CoreAI_BehaviorMode
-
     constructor(brain: CoreAI_Brain, mode: CoreAI_BehaviorMode = 'onFoot') {
         super(brain)
-        this.mode = mode
     }
 
     override async enter(): Promise<void> {
@@ -1583,7 +1532,10 @@ export class CoreAI_FightBehavior extends CoreAI_ABehavior {
             return
         }
 
-        if (this.mode === 'onDrive') {
+        if (
+            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
+            mod.GetPlayerVehicleSeat(player) === 0
+        ) {
             const vehicle = mod.GetVehicleFromPlayer(player)
             if (!vehicle) return
 
@@ -2154,8 +2106,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     const m = brain.memory
                     return m.get('isInBattle') ? 200 : 0
                 },
-                factory: (brain) =>
-                    new CoreAI_FightBehavior(brain, this.getMoveMode(brain)),
+                factory: (brain) => new CoreAI_FightBehavior(brain),
             },
 
             {
@@ -2170,8 +2121,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     return new CoreAI_MoveToBehavior(
                         brain,
                         pos,
-                        mod.MoveSpeed.InvestigateRun,
-                        this.getMoveMode(brain)
+                        mod.MoveSpeed.InvestigateRun
                     )
                 },
             },
@@ -2205,8 +2155,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                         Math.random() < 0.7
                             ? mod.MoveSpeed.Sprint
                             : mod.MoveSpeed.Run,
-                        'onFoot',
-                        2.0,
                         false
                     )
                 },
@@ -2226,41 +2174,18 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
             {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
                 factory: (brain) => {
-                    const mode = this.getMoveMode(brain)
-
                     return new CoreAI_MoveToBehavior(
                         brain,
                         brain.memory.get('roamPos')!,
                         Math.random() < 0.3
                             ? mod.MoveSpeed.Sprint
-                            : mod.MoveSpeed.Run,
-                        mode,
-                        mode === 'onFoot' ? 3.0 : 6.0
+                            : mod.MoveSpeed.Run
                     )
                 },
             },
         ] as CoreAI_ITaskScoringEntry[]
 
         this.buildSensors(options)
-    }
-
-    /**
-     *
-     */
-
-    protected getMoveMode(brain: { player: mod.Player }): 'onFoot' | 'onDrive' {
-        const player = brain.player
-        if (!mod.IsPlayerValid(player)) return 'onFoot'
-
-        if (!mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle)) {
-            return 'onFoot'
-        }
-
-        if (mod.GetPlayerVehicleSeat(player) === 0) {
-            return 'onDrive'
-        }
-
-        return 'onFoot'
     }
 
     /**
@@ -2465,7 +2390,7 @@ export function OnPlayerDeployed(eventPlayer: mod.Player) {
 export function OngoingPlayer(eventPlayer: mod.Player) {
     const brain = getBrain(eventPlayer)
     if (brain) {
-        brain.tick()
+        brain.OngoingPlayer()
     }
 }
 
@@ -2508,7 +2433,11 @@ export function OnPlayerDamaged(
 ) {
     const brain = getBrain(eventPlayer)
     if (brain) {
-        brain.onDamaged(eventOtherPlayer, eventDamageType, eventWeaponUnlock)
+        brain.OnPlayerDamaged(
+            eventOtherPlayer,
+            eventDamageType,
+            eventWeaponUnlock
+        )
     }
 }
 
@@ -2520,7 +2449,7 @@ export function OnRayCastHit(
 ) {
     const brain = getBrain(eventPlayer)
     if (brain) {
-        brain.onRayCastHit(eventPoint, eventNormal)
+        brain.OnRayCastHit(eventPoint, eventNormal)
     }
 }
 
