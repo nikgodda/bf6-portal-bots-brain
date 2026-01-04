@@ -2353,25 +2353,25 @@ export class CoreAI_CombatantProfile extends CoreAI_BaseProfile {
 //----------- END OF BRAIN
 
 /**
- *                                                                                    
- *                                                                                    
- *                                                                                    
- *       :####:    :##:    ###  ###  ########  ###  ###   .####.   #####:    ######## 
- *       ######     ##     ###  ###  ########  ###  ###   ######   #######   ######## 
- *     :##:  .#    ####    ###::###  ##        ###::###  :##  ##:  ##  :##:  ##       
- *     ##:         ####    ###  ###  ##        ###  ###  ##:  :##  ##   :##  ##       
- *     ##.        :#  #:   ## ## ##  ##        ## ## ##  ##    ##  ##   .##  ##       
- *     ##          #::#    ##:##:##  #######   ##:##:##  ##    ##  ##    ##  #######  
- *     ##  ####   ##  ##   ##.##.##  #######   ##.##.##  ##    ##  ##    ##  #######  
- *     ##. ####   ######   ## ## ##  ##        ## ## ##  ##    ##  ##   .##  ##       
- *     ##:   ##  .######.  ##    ##  ##        ##    ##  ##:  :##  ##   :##  ##       
- *     :##:  ##  :##  ##:  ##    ##  ##        ##    ##  :##  ##:  ##  :##:  ##       
- *      #######  ###  ###  ##    ##  ########  ##    ##   ######   #######   ######## 
- *       :####.  ##:  :##  ##    ##  ########  ##    ##   .####.   #####:    ######## 
- *                                                                                    
- *                                                                                    
- *                                                                                    
- *                                                                                    
+ *
+ *
+ *
+ *       :####:    :##:    ###  ###  ########  ###  ###   .####.   #####:    ########
+ *       ######     ##     ###  ###  ########  ###  ###   ######   #######   ########
+ *     :##:  .#    ####    ###::###  ##        ###::###  :##  ##:  ##  :##:  ##
+ *     ##:         ####    ###  ###  ##        ###  ###  ##:  :##  ##   :##  ##
+ *     ##.        :#  #:   ## ## ##  ##        ## ## ##  ##    ##  ##   .##  ##
+ *     ##          #::#    ##:##:##  #######   ##:##:##  ##    ##  ##    ##  #######
+ *     ##  ####   ##  ##   ##.##.##  #######   ##.##.##  ##    ##  ##    ##  #######
+ *     ##. ####   ######   ## ## ##  ##        ## ## ##  ##    ##  ##   .##  ##
+ *     ##:   ##  .######.  ##    ##  ##        ##    ##  ##:  :##  ##   :##  ##
+ *     :##:  ##  :##  ##:  ##    ##  ##        ##    ##  :##  ##:  ##  :##:  ##
+ *      #######  ###  ###  ##    ##  ########  ##    ##   ######   #######   ########
+ *       :####.  ##:  :##  ##    ##  ########  ##    ##   .####.   #####:    ########
+ *
+ *
+ *
+ *
  */
 
 const ENABLE_BOTS_BRAIN_DEBUG = true
@@ -2457,6 +2457,15 @@ export function OnPlayerLeaveGame(eventNumber: number) {
     // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or check my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
     const brain = brainManager.get(eventNumber)
     if (brain) {
+    }
+}
+
+export function OnPlayerDeployed(eventPlayer: mod.Player) {
+    if (mod.GetSoldierState(eventPlayer, mod.SoldierStateBool.IsAISoldier)) {
+        const brain = getBrain(eventPlayer)
+        if (brain) {
+            brain.installProfile(infantryProfile)
+        }
     }
 }
 
