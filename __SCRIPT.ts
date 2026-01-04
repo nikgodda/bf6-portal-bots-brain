@@ -2436,7 +2436,7 @@ export function OnPlayerJoinGame(eventPlayer: mod.Player) {
 
 // This will trigger when any player leaves the game.
 export function OnPlayerLeaveGame(eventNumber: number) {
-    // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or use my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
+    // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or check my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
     const brain = brainManager.get(eventNumber)
     if (brain) {
     }
