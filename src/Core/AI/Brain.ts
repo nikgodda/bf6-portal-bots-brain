@@ -29,7 +29,7 @@ import { CoreAI_SensorContext } from './Modules/Perception/Sensors/SensorContext
  * All player integration is handled by BrainComponent.
  */
 
-// @stringkeys core.ai.bots: 1..32
+// @stringkeys bots: 1..32
 
 export class CoreAI_Brain {
     public player: mod.Player
