@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "Node16",
+        "moduleResolution": "Node16",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "noImplicitOverride": true,
+
+        "baseUrl": ".",
+
+        "paths": {
+            "modlib": ["./SDK/modlib"],
+            "mod": ["./SDK/mod"]
+        },
+
+        "typeRoots": ["./SDK/mod", "./SDK/modlib", "./node_modules/@types"]
+    },
+
+    "include": [
+        "src/**/*",
+        "__SCRIPT.ts",
+        "__STRINGS.json",
+        "SDK/mod/**/*",
+        "SDK/modlib/**/*"
+    ],
+
+    "exclude": ["node_modules", "dist"]
+}

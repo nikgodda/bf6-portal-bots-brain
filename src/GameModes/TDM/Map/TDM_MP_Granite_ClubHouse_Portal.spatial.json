@@ -1,0 +1,1242 @@
+{
+    "Portal_Dynamic": [
+        {
+            "name": "TEAM_1_HQ",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 1,
+            "InfantrySpawns": [
+                "TEAM_1_HQ/SpawnPoint_1_1",
+                "TEAM_1_HQ/SpawnPoint_1_2",
+                "TEAM_1_HQ/SpawnPoint_1_3",
+                "TEAM_1_HQ/SpawnPoint_1_4"
+            ],
+            "HQArea": "TEAM_1_HQ/HQ_Team1",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -293.596,
+                "y": 191.176,
+                "z": -597.598
+            },
+            "id": "TEAM_1_HQ",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team1",
+            "type": "PolygonVolume",
+            "id": "TEAM_1_HQ/HQ_Team1",
+            "height": 0,
+            "points": [
+                {
+                    "x": -288.596,
+                    "y": 196.176,
+                    "z": -592.598
+                },
+                {
+                    "x": -288.596,
+                    "y": 196.176,
+                    "z": -602.598
+                },
+                {
+                    "x": -298.596,
+                    "y": 196.176,
+                    "z": -602.598
+                },
+                {
+                    "x": -298.596,
+                    "y": 196.176,
+                    "z": -592.598
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_1_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.999884,
+                "y": 0,
+                "z": 0.0152535
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.0152535,
+                "y": 0,
+                "z": 0.999884
+            },
+            "position": {
+                "x": -293.596,
+                "y": 191.176,
+                "z": -600.598
+            },
+            "id": "TEAM_1_HQ/SpawnPoint_1_1"
+        },
+        {
+            "name": "SpawnPoint_1_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.9995,
+                "y": 0,
+                "z": 0.0316198
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.0316198,
+                "y": 0,
+                "z": -0.9995
+            },
+            "position": {
+                "x": -290.596,
+                "y": 191.176,
+                "z": -597.598
+            },
+            "id": "TEAM_1_HQ/SpawnPoint_1_2"
+        },
+        {
+            "name": "SpawnPoint_1_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.0428871,
+                "y": 0,
+                "z": -0.99908
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.99908,
+                "y": 0,
+                "z": -0.0428871
+            },
+            "position": {
+                "x": -296.596,
+                "y": 191.176,
+                "z": -597.598
+            },
+            "id": "TEAM_1_HQ/SpawnPoint_1_3"
+        },
+        {
+            "name": "SpawnPoint_1_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.0841819,
+                "y": 0,
+                "z": 0.99645
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.99645,
+                "y": 0,
+                "z": 0.0841819
+            },
+            "position": {
+                "x": -293.596,
+                "y": 191.176,
+                "z": -594.598
+            },
+            "id": "TEAM_1_HQ/SpawnPoint_1_4"
+        },
+        {
+            "name": "TEAM_2_HQ",
+            "Team": "Team2",
+            "AltTeam": "TeamNeutral",
+            "ObjId": 2,
+            "InfantrySpawns": [
+                "TEAM_2_HQ/SpawnPoint_2_1",
+                "TEAM_2_HQ/SpawnPoint_2_2",
+                "TEAM_2_HQ/SpawnPoint_2_3",
+                "TEAM_2_HQ/SpawnPoint_2_4"
+            ],
+            "HQArea": "TEAM_2_HQ/HQ_Team2",
+            "type": "HQ_PlayerSpawner",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -412.605,
+                "y": 190.501,
+                "z": -635.402
+            },
+            "id": "TEAM_2_HQ",
+            "linked": [
+                "HQArea",
+                "InfantrySpawns"
+            ]
+        },
+        {
+            "name": "HQ_Team2",
+            "type": "PolygonVolume",
+            "id": "TEAM_2_HQ/HQ_Team2",
+            "height": 0,
+            "points": [
+                {
+                    "x": -407.605,
+                    "y": 195.501,
+                    "z": -630.402
+                },
+                {
+                    "x": -407.605,
+                    "y": 195.501,
+                    "z": -640.402
+                },
+                {
+                    "x": -417.605,
+                    "y": 195.501,
+                    "z": -640.402
+                },
+                {
+                    "x": -417.605,
+                    "y": 195.501,
+                    "z": -630.402
+                }
+            ]
+        },
+        {
+            "name": "SpawnPoint_2_1",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.87795,
+                "y": 0,
+                "z": 0.478754
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.478754,
+                "y": 0,
+                "z": 0.87795
+            },
+            "position": {
+                "x": -412.605,
+                "y": 190.501,
+                "z": -638.402
+            },
+            "id": "TEAM_2_HQ/SpawnPoint_2_1"
+        },
+        {
+            "name": "SpawnPoint_2_2",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.997604,
+                "y": 0,
+                "z": -0.0691822
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.0691822,
+                "y": 0,
+                "z": -0.997604
+            },
+            "position": {
+                "x": -409.605,
+                "y": 190.501,
+                "z": -635.402
+            },
+            "id": "TEAM_2_HQ/SpawnPoint_2_2"
+        },
+        {
+            "name": "SpawnPoint_2_3",
+            "type": "SpawnPoint",
+            "right": {
+                "x": 0.162758,
+                "y": 0,
+                "z": -0.986666
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0.986666,
+                "y": 0,
+                "z": 0.162758
+            },
+            "position": {
+                "x": -415.605,
+                "y": 190.501,
+                "z": -635.402
+            },
+            "id": "TEAM_2_HQ/SpawnPoint_2_3"
+        },
+        {
+            "name": "SpawnPoint_2_4",
+            "type": "SpawnPoint",
+            "right": {
+                "x": -0.165771,
+                "y": 0,
+                "z": 0.986164
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": -0.986164,
+                "y": 0,
+                "z": -0.165771
+            },
+            "position": {
+                "x": -412.605,
+                "y": 190.501,
+                "z": -632.402
+            },
+            "id": "TEAM_2_HQ/SpawnPoint_2_4"
+        },
+        {
+            "name": "CombatArea",
+            "CombatVolume": "CombatArea/CombatVolume",
+            "type": "CombatArea",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "id": "CombatArea",
+            "linked": [
+                "CombatVolume"
+            ]
+        },
+        {
+            "name": "CombatVolume",
+            "type": "PolygonVolume",
+            "id": "CombatArea/CombatVolume",
+            "height": 10,
+            "points": [
+                {
+                    "x": -573.976,
+                    "y": 182.889,
+                    "z": -918.816
+                },
+                {
+                    "x": -669.197,
+                    "y": 182.889,
+                    "z": -900.386
+                },
+                {
+                    "x": -784.896,
+                    "y": 182.889,
+                    "z": -853.288
+                },
+                {
+                    "x": -819.648,
+                    "y": 182.889,
+                    "z": -738.856
+                },
+                {
+                    "x": -831.387,
+                    "y": 182.889,
+                    "z": -628.659
+                },
+                {
+                    "x": -800.322,
+                    "y": 182.889,
+                    "z": -530.623
+                },
+                {
+                    "x": -746.482,
+                    "y": 182.889,
+                    "z": -478.034
+                },
+                {
+                    "x": -709.228,
+                    "y": 182.889,
+                    "z": -470.842
+                },
+                {
+                    "x": -665.589,
+                    "y": 182.889,
+                    "z": -426.189
+                },
+                {
+                    "x": -561.689,
+                    "y": 182.889,
+                    "z": -330.081
+                },
+                {
+                    "x": -533.02,
+                    "y": 182.889,
+                    "z": -344.415
+                },
+                {
+                    "x": -476.706,
+                    "y": 182.889,
+                    "z": -272.743
+                },
+                {
+                    "x": -406.058,
+                    "y": 182.889,
+                    "z": -214.382
+                },
+                {
+                    "x": -323.123,
+                    "y": 182.889,
+                    "z": -190.832
+                },
+                {
+                    "x": -259.642,
+                    "y": 182.889,
+                    "z": -196.976
+                },
+                {
+                    "x": -173.635,
+                    "y": 182.889,
+                    "z": -206.191
+                },
+                {
+                    "x": -136.775,
+                    "y": 182.889,
+                    "z": -230.764
+                },
+                {
+                    "x": -97.8676,
+                    "y": 182.889,
+                    "z": -232.812
+                },
+                {
+                    "x": -73.2944,
+                    "y": 182.889,
+                    "z": -241.003
+                },
+                {
+                    "x": -56.9122,
+                    "y": 182.889,
+                    "z": -261.48
+                },
+                {
+                    "x": -40.53,
+                    "y": 182.889,
+                    "z": -291.173
+                },
+                {
+                    "x": -30.2911,
+                    "y": 182.889,
+                    "z": -314.723
+                },
+                {
+                    "x": -24.1478,
+                    "y": 182.889,
+                    "z": -331.105
+                },
+                {
+                    "x": -20.0523,
+                    "y": 182.889,
+                    "z": -349.535
+                },
+                {
+                    "x": -24.1478,
+                    "y": 182.889,
+                    "z": -366.941
+                },
+                {
+                    "x": -32.3389,
+                    "y": 182.889,
+                    "z": -394.586
+                },
+                {
+                    "x": -16.9805,
+                    "y": 182.889,
+                    "z": -405.849
+                },
+                {
+                    "x": -22.0999,
+                    "y": 182.889,
+                    "z": -437.589
+                },
+                {
+                    "x": -28.2434,
+                    "y": 182.889,
+                    "z": -487.76
+                },
+                {
+                    "x": -43.6018,
+                    "y": 182.889,
+                    "z": -516.429
+                },
+                {
+                    "x": -41.5539,
+                    "y": 182.889,
+                    "z": -591.172
+                },
+                {
+                    "x": -31.315,
+                    "y": 182.889,
+                    "z": -666.94
+                },
+                {
+                    "x": -20.0523,
+                    "y": 182.889,
+                    "z": -720.182
+                },
+                {
+                    "x": -28.2434,
+                    "y": 182.889,
+                    "z": -805.165
+                },
+                {
+                    "x": -50.769,
+                    "y": 182.889,
+                    "z": -873.765
+                },
+                {
+                    "x": -225.947,
+                    "y": 182.889,
+                    "z": -1007.52
+                },
+                {
+                    "x": -316.3,
+                    "y": 182.889,
+                    "z": -1018.02
+                },
+                {
+                    "x": -438.714,
+                    "y": 182.889,
+                    "z": -1005.34
+                },
+                {
+                    "x": -494.732,
+                    "y": 182.889,
+                    "z": -973.633
+                }
+            ]
+        },
+        {
+            "name": "DeployCam",
+            "type": "DeployCam",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 0.101056,
+                "z": -0.994881
+            },
+            "front": {
+                "x": 0,
+                "y": 0.994881,
+                "z": 0.101056
+            },
+            "position": {
+                "x": -490.88,
+                "y": 508.426,
+                "z": -598.183
+            },
+            "id": "Camera3D/DeployCam"
+        },
+        {
+            "name": "WineBottleCluster_01_B",
+            "ObjId": 1000,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -357.001,
+                "y": 193.378,
+                "z": -617.796
+            },
+            "id": "WineBottleCluster_01_B"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -362.001,
+                    "y": 193.378,
+                    "z": -622.796
+                },
+                {
+                    "x": -362.001,
+                    "y": 193.378,
+                    "z": -612.796
+                },
+                {
+                    "x": -352.001,
+                    "y": 193.378,
+                    "z": -612.796
+                },
+                {
+                    "x": -352.001,
+                    "y": 193.378,
+                    "z": -622.796
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B2",
+            "ObjId": 1001,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -371.56,
+                "y": 193.394,
+                "z": -581.109
+            },
+            "id": "WineBottleCluster_01_B2"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B2/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -376.56,
+                    "y": 193.394,
+                    "z": -586.109
+                },
+                {
+                    "x": -376.56,
+                    "y": 193.394,
+                    "z": -576.109
+                },
+                {
+                    "x": -366.56,
+                    "y": 193.394,
+                    "z": -576.109
+                },
+                {
+                    "x": -366.56,
+                    "y": 193.394,
+                    "z": -586.109
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B3",
+            "ObjId": 1002,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -342.06,
+                "y": 193.409,
+                "z": -657.499
+            },
+            "id": "WineBottleCluster_01_B3"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B3/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -347.06,
+                    "y": 193.409,
+                    "z": -662.499
+                },
+                {
+                    "x": -347.06,
+                    "y": 193.409,
+                    "z": -652.499
+                },
+                {
+                    "x": -337.06,
+                    "y": 193.409,
+                    "z": -652.499
+                },
+                {
+                    "x": -337.06,
+                    "y": 193.409,
+                    "z": -662.499
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B4",
+            "ObjId": 1003,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -319.539,
+                "y": 192.147,
+                "z": -627.237
+            },
+            "id": "WineBottleCluster_01_B4"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B4/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -324.539,
+                    "y": 192.147,
+                    "z": -632.237
+                },
+                {
+                    "x": -324.539,
+                    "y": 192.147,
+                    "z": -622.237
+                },
+                {
+                    "x": -314.539,
+                    "y": 192.147,
+                    "z": -622.237
+                },
+                {
+                    "x": -314.539,
+                    "y": 192.147,
+                    "z": -632.237
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B5",
+            "ObjId": 1004,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -336.408,
+                "y": 193.378,
+                "z": -594.564
+            },
+            "id": "WineBottleCluster_01_B5"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B5/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -341.408,
+                    "y": 193.378,
+                    "z": -599.564
+                },
+                {
+                    "x": -341.408,
+                    "y": 193.378,
+                    "z": -589.564
+                },
+                {
+                    "x": -331.408,
+                    "y": 193.378,
+                    "z": -589.564
+                },
+                {
+                    "x": -331.408,
+                    "y": 193.378,
+                    "z": -599.564
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B6",
+            "ObjId": 1005,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -389.585,
+                "y": 193.378,
+                "z": -612.289
+            },
+            "id": "WineBottleCluster_01_B6"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B6/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -394.585,
+                    "y": 193.378,
+                    "z": -617.289
+                },
+                {
+                    "x": -394.585,
+                    "y": 193.378,
+                    "z": -607.289
+                },
+                {
+                    "x": -384.585,
+                    "y": 193.378,
+                    "z": -607.289
+                },
+                {
+                    "x": -384.585,
+                    "y": 193.378,
+                    "z": -617.289
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B7",
+            "ObjId": 1006,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -374.675,
+                "y": 192.881,
+                "z": -647.356
+            },
+            "id": "WineBottleCluster_01_B7"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B7/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -379.675,
+                    "y": 192.881,
+                    "z": -652.356
+                },
+                {
+                    "x": -379.675,
+                    "y": 192.881,
+                    "z": -642.356
+                },
+                {
+                    "x": -369.675,
+                    "y": 192.881,
+                    "z": -642.356
+                },
+                {
+                    "x": -369.675,
+                    "y": 192.881,
+                    "z": -652.356
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B8",
+            "ObjId": 1007,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -386.086,
+                "y": 193.459,
+                "z": -622.632
+            },
+            "id": "WineBottleCluster_01_B8"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B8/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -391.086,
+                    "y": 193.459,
+                    "z": -627.632
+                },
+                {
+                    "x": -391.086,
+                    "y": 193.459,
+                    "z": -617.632
+                },
+                {
+                    "x": -381.086,
+                    "y": 193.459,
+                    "z": -617.632
+                },
+                {
+                    "x": -381.086,
+                    "y": 193.459,
+                    "z": -627.632
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B9",
+            "ObjId": 1008,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -373.458,
+                "y": 193.508,
+                "z": -609.864
+            },
+            "id": "WineBottleCluster_01_B9"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B9/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -378.458,
+                    "y": 193.508,
+                    "z": -614.864
+                },
+                {
+                    "x": -378.458,
+                    "y": 193.508,
+                    "z": -604.864
+                },
+                {
+                    "x": -368.458,
+                    "y": 193.508,
+                    "z": -604.864
+                },
+                {
+                    "x": -368.458,
+                    "y": 193.508,
+                    "z": -614.864
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B10",
+            "ObjId": 1009,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -350.943,
+                "y": 193.508,
+                "z": -602.184
+            },
+            "id": "WineBottleCluster_01_B10"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B10/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -355.943,
+                    "y": 193.508,
+                    "z": -607.184
+                },
+                {
+                    "x": -355.943,
+                    "y": 193.508,
+                    "z": -597.184
+                },
+                {
+                    "x": -345.943,
+                    "y": 193.508,
+                    "z": -597.184
+                },
+                {
+                    "x": -345.943,
+                    "y": 193.508,
+                    "z": -607.184
+                }
+            ]
+        },
+        {
+            "name": "WineBottleCluster_01_B11",
+            "ObjId": 1010,
+            "type": "WineBottleCluster_01_B",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -360.181,
+                "y": 193.42,
+                "z": -637.086
+            },
+            "id": "WineBottleCluster_01_B11"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "WineBottleCluster_01_B11/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -365.181,
+                    "y": 193.42,
+                    "z": -642.086
+                },
+                {
+                    "x": -365.181,
+                    "y": 193.42,
+                    "z": -632.086
+                },
+                {
+                    "x": -355.181,
+                    "y": 193.42,
+                    "z": -632.086
+                },
+                {
+                    "x": -355.181,
+                    "y": 193.42,
+                    "z": -642.086
+                }
+            ]
+        }
+    ],
+    "Static": [
+        {
+            "name": "MP_Granite_ClubHouse_Portal_Terrain",
+            "metadata/_edit_lock_": true,
+            "type": "MP_Granite_ClubHouse_Portal_Terrain",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "id": "Static/MP_Granite_ClubHouse_Portal_Terrain"
+        },
+        {
+            "name": "MP_Granite_ClubHouse_Portal_Assets",
+            "metadata/_edit_lock_": true,
+            "type": "MP_Granite_ClubHouse_Portal_Assets",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "id": "Static/MP_Granite_ClubHouse_Portal_Assets"
+        }
+    ]
+}

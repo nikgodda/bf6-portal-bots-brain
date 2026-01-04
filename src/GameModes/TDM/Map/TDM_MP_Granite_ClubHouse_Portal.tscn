@@ -1,0 +1,146 @@
+[gd_scene load_steps=9 format=3 uid="uid://c6cxw8ene74op"]
+
+[ext_resource type="PackedScene" path="res://objects/Gameplay/Common/HQ_PlayerSpawner.tscn" id="1_rljqe"]
+[ext_resource type="PackedScene" uid="uid://jv31so3xcr7p" path="res://addons/bf_portal/portal_tools/types/PolygonVolume/PolygonVolume.tscn" id="2_325s4"]
+[ext_resource type="PackedScene" path="res://objects/entities/SpawnPoint.tscn" id="3_l2cvy"]
+[ext_resource type="PackedScene" path="res://objects/Gameplay/Common/CombatArea.tscn" id="4_1eb4i"]
+[ext_resource type="PackedScene" path="res://objects/Gameplay/Common/DeployCam.tscn" id="5_0qarr"]
+[ext_resource type="PackedScene" path="res://static/MP_Granite_ClubHouse_Portal_Terrain.tscn" id="6_pe6hm"]
+[ext_resource type="PackedScene" path="res://static/MP_Granite_ClubHouse_Portal_Assets.tscn" id="7_8t8qk"]
+[ext_resource type="PackedScene" path="res://objects/Shared/Generic/Common/Props/WineBottleCluster_01_B.tscn" id="8_8sj3y"]
+
+[node name="MP_Granite_ClubHouse_Portal" type="Node3D"]
+
+[node name="TEAM_1_HQ" parent="." node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_rljqe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -293.596, 191.176, -597.598)
+AltTeam = 0
+ObjId = 1
+HQArea = NodePath("HQ_Team1")
+InfantrySpawns = [NodePath("SpawnPoint_1_1"), NodePath("SpawnPoint_1_2"), NodePath("SpawnPoint_1_3"), NodePath("SpawnPoint_1_4")]
+
+[node name="HQ_Team1" parent="TEAM_1_HQ" instance=ExtResource("2_325s4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+points = PackedVector2Array(5, 5, 5, -5, -5, -5, -5, 5)
+
+[node name="SpawnPoint_1_1" parent="TEAM_1_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(0.999884, 0, -0.0152535, 0, 1, 0, 0.0152535, 0, 0.999884, 0, 0, -3)
+
+[node name="SpawnPoint_1_2" parent="TEAM_1_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(-0.9995, 0, -0.0316198, 0, 1, 0, 0.0316198, 0, -0.9995, 3, 0, 0)
+
+[node name="SpawnPoint_1_3" parent="TEAM_1_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(-0.0428871, 0, 0.99908, 0, 1, 0, -0.99908, 0, -0.0428871, -3, 0, 0)
+
+[node name="SpawnPoint_1_4" parent="TEAM_1_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(0.0841819, 0, -0.99645, 0, 1, 0, 0.99645, 0, 0.0841819, 0, 0, 3)
+
+[node name="TEAM_2_HQ" parent="." node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_rljqe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -412.605, 190.501, -635.402)
+Team = 2
+AltTeam = 0
+ObjId = 2
+HQArea = NodePath("HQ_Team2")
+InfantrySpawns = [NodePath("SpawnPoint_2_1"), NodePath("SpawnPoint_2_2"), NodePath("SpawnPoint_2_3"), NodePath("SpawnPoint_2_4")]
+
+[node name="HQ_Team2" parent="TEAM_2_HQ" instance=ExtResource("2_325s4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+points = PackedVector2Array(5, 5, 5, -5, -5, -5, -5, 5)
+
+[node name="SpawnPoint_2_1" parent="TEAM_2_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(0.87795, 0, -0.478754, 0, 1, 0, 0.478754, 0, 0.87795, 0, 0, -3)
+
+[node name="SpawnPoint_2_2" parent="TEAM_2_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(-0.997604, 0, 0.0691822, 0, 1, 0, -0.0691822, 0, -0.997604, 3, 0, 0)
+
+[node name="SpawnPoint_2_3" parent="TEAM_2_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(0.162758, 0, 0.986666, 0, 1, 0, -0.986666, 0, 0.162758, -3, 0, 0)
+
+[node name="SpawnPoint_2_4" parent="TEAM_2_HQ" instance=ExtResource("3_l2cvy")]
+transform = Transform3D(-0.165771, 0, -0.986164, 0, 1, 0, 0.986164, 0, -0.165771, 0, 0, 3)
+
+[node name="CombatArea" parent="." node_paths=PackedStringArray("CombatVolume") instance=ExtResource("4_1eb4i")]
+CombatVolume = NodePath("CombatVolume")
+
+[node name="CombatVolume" parent="CombatArea" instance=ExtResource("2_325s4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 182.889, 0)
+points = PackedVector2Array(-572.976, -918.816, -668.197, -900.386, -783.896, -853.288, -818.648, -738.856, -830.387, -628.659, -799.322, -530.623, -745.482, -478.034, -708.228, -470.842, -664.589, -426.189, -560.689, -330.081, -532.02, -344.415, -475.706, -272.743, -405.058, -214.382, -322.123, -190.832, -258.642, -196.976, -172.635, -206.191, -135.775, -230.764, -96.8676, -232.812, -72.2944, -241.003, -55.9122, -261.48, -39.53, -291.173, -29.2911, -314.723, -23.1478, -331.105, -19.0523, -349.535, -23.1478, -366.941, -31.3389, -394.586, -15.9805, -405.849, -21.0999, -437.589, -27.2434, -487.76, -42.6018, -516.429, -40.5539, -591.172, -30.315, -666.94, -19.0523, -720.182, -27.2434, -805.165, -49.769, -873.765, -224.947, -1007.52, -315.3, -1018.02, -437.714, -1005.34, -493.732, -973.633)
+height = 10.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.101056, 0.994881, 0, -0.994881, 0.101056, -490.88, 508.426, -598.183)
+
+[node name="DeployCam" parent="Camera3D" instance=ExtResource("5_0qarr")]
+
+[node name="Static" type="Node3D" parent="."]
+
+[node name="MP_Granite_ClubHouse_Portal_Terrain" parent="Static" instance=ExtResource("6_pe6hm")]
+metadata/_edit_lock_ = true
+
+[node name="MP_Granite_ClubHouse_Portal_Assets" parent="Static" instance=ExtResource("7_8t8qk")]
+metadata/_edit_lock_ = true
+
+[node name="WineBottleCluster_01_B" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -357.001, 193.378, -617.796)
+ObjId = 1000
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B2" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -371.56, 193.394, -581.109)
+ObjId = 1001
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B2" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B3" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -342.06, 193.409, -657.499)
+ObjId = 1002
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B3" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B4" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -319.539, 192.147, -627.237)
+ObjId = 1003
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B4" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B5" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -336.408, 193.378, -594.564)
+ObjId = 1004
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B5" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B6" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -389.585, 193.378, -612.289)
+ObjId = 1005
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B6" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B7" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -374.675, 192.881, -647.356)
+ObjId = 1006
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B7" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B8" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -386.086, 193.459, -622.632)
+ObjId = 1007
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B8" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B9" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -373.458, 193.508, -609.864)
+ObjId = 1008
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B9" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B10" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -350.943, 193.508, -602.184)
+ObjId = 1009
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B10" instance=ExtResource("2_325s4")]
+
+[node name="WineBottleCluster_01_B11" parent="." instance=ExtResource("8_8sj3y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.181, 193.42, -637.086)
+ObjId = 1010
+
+[node name="PolygonVolume" parent="WineBottleCluster_01_B11" instance=ExtResource("2_325s4")]
