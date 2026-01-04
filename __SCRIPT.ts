@@ -2377,7 +2377,7 @@ export class CoreAI_CombatantProfile extends CoreAI_BaseProfile {
  *
  */
 
-const ENABLE_BOTS_BRAIN_DEBUG = true
+const ENABLE_BOTS_BRAIN_DEBUG = false
 const BOTS_UNSPAWN_DELAY = 10
 
 /**
