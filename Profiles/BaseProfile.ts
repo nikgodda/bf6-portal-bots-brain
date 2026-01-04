@@ -145,7 +145,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
                 behaviorClass: () => CoreAI_MoveToBehavior,
                 isSame: (brain, current) => {
-                    mod.DisplayHighlightedWorldLogMessage(mod.Message(1))
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
 
@@ -158,7 +157,6 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                     )
                 },
                 factory: (brain) => {
-                    mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
                     return new CoreAI_MoveToBehavior(
                         brain,
                         brain.memory.get('roamPos')!,
