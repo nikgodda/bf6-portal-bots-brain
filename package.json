@@ -6,7 +6,7 @@
     "typescript": "^5.5.0"
   },
   "scripts": {
-    "update-coreai-brain": "node scripts/update-coreai-brain.js",
-    "update-coreai": "node scripts/update-coreai.js"
+    "update": "node scripts/update-coreai.js",
+    "build": "node scripts/update-coreai-brain.js"
   }
 }

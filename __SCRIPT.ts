@@ -436,14 +436,20 @@ export class CoreAI_BehaviorController {
 /**
  * CoreAI_ITaskScoringEntry:
  * - score(brain): returns utility score for this behavior.
+ * - behaviorClass(brain): returns the class used for comparison without instantiation.
+ * - isSame(brain, current): optional refinement to keep current behavior instance.
  * - factory(brain): creates a ready-to-run behavior instance.
  *
  * TaskSelector:
  * - picks the entry with highest score
- * - calls factory(brain) to get the behavior instance
+ * - uses behaviorClass/isSame to avoid unnecessary factory calls
  */
 export interface CoreAI_ITaskScoringEntry {
     score: (brain: CoreAI_Brain) => number
+    behaviorClass?: (
+        brain: CoreAI_Brain
+    ) => new (...args: any[]) => CoreAI_ABehavior
+    isSame?: (brain: CoreAI_Brain, current: CoreAI_ABehavior) => boolean
     factory: (brain: CoreAI_Brain) => CoreAI_ABehavior
 }
 
@@ -525,103 +531,6 @@ export interface CoreAI_SensorOptions {
     moveToCapturePointSensor?: CoreAI_CapturePointSensorOptions
 }
 
-/**
- * MoveToBehavior:
- * - Starts movement in enter()
- * - Runs as long as memory.roamPos exists
- * - Stopped automatically when TTL clears roamPos
- * - Optional target enables AISetTarget during movement
- * - Mode selects on-foot or driver logic (never both)
- *
- * TTL-driven memory replaces durationMs logic.
- */
-export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
-    public name = 'moveto'
-
-    private roamPos: mod.Vector
-    private readonly speed: mod.MoveSpeed
-    private readonly isValidated: boolean
-
-    constructor(
-        brain: CoreAI_Brain,
-        pos: mod.Vector,
-        speed: mod.MoveSpeed = mod.MoveSpeed.Run,
-        isValidated: boolean = true
-    ) {
-        super(brain)
-        this.roamPos = pos
-        this.speed = speed
-        this.isValidated = isValidated
-    }
-
-    public getTargetPos(): mod.Vector {
-        return this.roamPos
-    }
-
-    override enter(): void {
-        const player = this.brain.player
-        if (!mod.IsPlayerValid(player)) {
-            return
-        }
-
-        if (
-            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
-            mod.GetPlayerVehicleSeat(player) === 0
-        ) {
-            this.enterOnDriveMove(player)
-            return
-        }
-
-        this.enterOnFootMove(player)
-    }
-
-    private async enterOnDriveMove(player: mod.Player): Promise<void> {
-        const vehicle = mod.GetVehicleFromPlayer(player)
-
-        mod.ForcePlayerExitVehicle(player, vehicle)
-        await mod.Wait(0)
-        await mod.Wait(0)
-        mod.ForcePlayerToSeat(player, vehicle, 0)
-        mod.AISetMoveSpeed(player, mod.MoveSpeed.Sprint)
-        // mod.AIBattlefieldBehavior(player)
-        mod.AIDefendPositionBehavior(player, this.roamPos, 0, 4)
-        // mod.AIValidatedMoveToBehavior(player, this.targetPos)
-    }
-
-    private enterOnFootMove(player: mod.Player): void {
-        mod.AISetMoveSpeed(player, this.speed)
-        this.isValidated
-            ? mod.AIValidatedMoveToBehavior(player, this.roamPos)
-            : mod.AIMoveToBehavior(player, this.roamPos)
-    }
-
-    override update(): void {
-        const player = this.brain.player
-        if (!mod.IsPlayerValid(player)) return
-
-        const memPos = this.brain.memory.get('roamPos')
-        if (!memPos) return
-
-        /* 
-        // Conflicts with other Scores
-        if (!mod.Equals(memPos, this.roamPos)) {
-            this.roamPos = memPos
-            this.enter()
-        } */
-
-        const myPos = mod.GetObjectPosition(player)
-        const dist = mod.DistanceBetween(myPos, this.roamPos)
-
-        if (dist < 3) {
-            this.brain.memory.set('roamPos', null)
-        }
-    }
-
-    override exit(): void {
-        // No target cleanup here; targeting is managed by the brain.
-    }
-}
-
 export class CoreAI_TaskSelector {
     private brain: CoreAI_Brain
     private profile: CoreAI_AProfile
@@ -659,28 +568,20 @@ export class CoreAI_TaskSelector {
             return new CoreAI_IdleBehavior(this.brain)
         }
 
-        // TEMP instance only to inspect class
-        const temp = bestEntry.factory(this.brain)
-        const nextClass = temp.constructor
+        const behaviorClass = bestEntry.behaviorClass?.(this.brain)
 
-        // If same class -> don't switch (no restarts), except MoveTo when target changes.
-        if (current && current.constructor === nextClass) {
-            if (
-                current instanceof CoreAI_MoveToBehavior &&
-                temp instanceof CoreAI_MoveToBehavior
-            ) {
-                const currentPos = current.getTargetPos()
-                const nextPos = temp.getTargetPos()
-                if (mod.DistanceBetween(currentPos, nextPos) <= 0) {
-                    return current
-                }
-            } else {
+        if (behaviorClass && current && current.constructor === behaviorClass) {
+            const keepCurrent = bestEntry.isSame
+                ? bestEntry.isSame(this.brain, current)
+                : true
+
+            if (keepCurrent) {
                 return current
             }
         }
 
         // Switch to new instance
-        return temp
+        return bestEntry.factory(this.brain)
     }
 }
 
@@ -1365,16 +1266,6 @@ export class CoreAI_Brain {
 
         this.behaviorController.update()
     }
-
-    /* ------------------------------------------------------------
-     * Cleanup
-     * ------------------------------------------------------------ */
-
-    destroy(): void {
-        this.memory.reset()
-        this.behaviorController.resetAll()
-        this.perception.clearSensors()
-    }
 }
 
 /**
@@ -1563,6 +1454,103 @@ export class CoreAI_FightBehavior extends CoreAI_ABehavior {
 
     override exit(): void {
         // No cleanup required for fight mode in this architecture
+    }
+}
+
+/**
+ * MoveToBehavior:
+ * - Starts movement in enter()
+ * - Runs as long as memory.roamPos exists
+ * - Stopped automatically when TTL clears roamPos
+ * - Optional target enables AISetTarget during movement
+ * - Mode selects on-foot or driver logic (never both)
+ *
+ * TTL-driven memory replaces durationMs logic.
+ */
+export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
+    public name = 'moveto'
+
+    private roamPos: mod.Vector
+    private readonly speed: mod.MoveSpeed
+    private readonly isValidated: boolean
+
+    constructor(
+        brain: CoreAI_Brain,
+        pos: mod.Vector,
+        speed: mod.MoveSpeed = mod.MoveSpeed.Run,
+        isValidated: boolean = true
+    ) {
+        super(brain)
+        this.roamPos = pos
+        this.speed = speed
+        this.isValidated = isValidated
+    }
+
+    public getTargetPos(): mod.Vector {
+        return this.roamPos
+    }
+
+    override enter(): void {
+        const player = this.brain.player
+        if (!mod.IsPlayerValid(player)) {
+            return
+        }
+
+        if (
+            mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle) &&
+            mod.GetPlayerVehicleSeat(player) === 0
+        ) {
+            this.enterOnDriveMove(player)
+            return
+        }
+
+        this.enterOnFootMove(player)
+    }
+
+    private async enterOnDriveMove(player: mod.Player): Promise<void> {
+        const vehicle = mod.GetVehicleFromPlayer(player)
+
+        mod.ForcePlayerExitVehicle(player, vehicle)
+        await mod.Wait(0)
+        await mod.Wait(0)
+        mod.ForcePlayerToSeat(player, vehicle, 0)
+        mod.AISetMoveSpeed(player, mod.MoveSpeed.Sprint)
+        // mod.AIBattlefieldBehavior(player)
+        mod.AIDefendPositionBehavior(player, this.roamPos, 0, 4)
+        // mod.AIValidatedMoveToBehavior(player, this.targetPos)
+    }
+
+    private enterOnFootMove(player: mod.Player): void {
+        mod.AISetMoveSpeed(player, this.speed)
+        this.isValidated
+            ? mod.AIValidatedMoveToBehavior(player, this.roamPos)
+            : mod.AIMoveToBehavior(player, this.roamPos)
+    }
+
+    override update(): void {
+        const player = this.brain.player
+        if (!mod.IsPlayerValid(player)) return
+
+        const memPos = this.brain.memory.get('roamPos')
+        if (!memPos) return
+
+        /* 
+        // Conflicts with other Scores
+        if (!mod.Equals(memPos, this.roamPos)) {
+            this.roamPos = memPos
+            this.enter()
+        } */
+
+        const myPos = mod.GetObjectPosition(player)
+        const dist = mod.DistanceBetween(myPos, this.roamPos)
+
+        if (dist < 3) {
+            this.brain.memory.set('roamPos', null)
+        }
+    }
+
+    override exit(): void {
+        // No target cleanup here; targeting is managed by the brain.
     }
 }
 
@@ -2100,17 +2088,46 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
     constructor(options: CoreAI_BaseProfileOptions = {}) {
         super()
 
+        const getVehicleToDriveInfo = (brain: CoreAI_Brain) => {
+            const vehicle = brain.memory.get('vehicleToDrive')
+            if (!vehicle) return null
+
+            const vPos = mod.GetVehicleState(
+                vehicle,
+                mod.VehicleStateVector.VehiclePosition
+            )
+            const dist = mod.DistanceBetween(
+                mod.GetObjectPosition(brain.player),
+                vPos
+            )
+
+            return { vehicle, vPos, dist }
+        }
+
         this.scoring = [
             {
-                score: (brain) => {
-                    const m = brain.memory
-                    return m.get('isInBattle') ? 200 : 0
-                },
+                score: (brain) => (brain.memory.get('isInBattle') ? 200 : 0),
+                behaviorClass: () => CoreAI_FightBehavior,
                 factory: (brain) => new CoreAI_FightBehavior(brain),
             },
 
             {
                 score: (brain) => (brain.memory.get('closestEnemy') ? 150 : 0),
+                behaviorClass: () => CoreAI_MoveToBehavior,
+                isSame: (brain, current) => {
+                    if (!(current instanceof CoreAI_MoveToBehavior))
+                        return false
+
+                    const enemy = brain.memory.get('closestEnemy')
+                    if (!enemy) return false
+
+                    const pos = mod.GetSoldierState(
+                        enemy,
+                        mod.SoldierStateVector.GetPosition
+                    )
+
+                    return mod.DistanceBetween(current.getTargetPos(), pos) <= 0
+                },
                 factory: (brain) => {
                     const enemy = brain.memory.get('closestEnemy')!
                     const pos = mod.GetSoldierState(
@@ -2129,21 +2146,40 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
             {
                 score: (brain) =>
                     brain.memory.get('vehicleToDrive') ? 290 : 0,
-                factory: (brain) => {
-                    const vehicle = brain.memory.get('vehicleToDrive')!
-                    const vPos = mod.GetVehicleState(
-                        vehicle,
-                        mod.VehicleStateVector.VehiclePosition
-                    )
-                    const dist = mod.DistanceBetween(
-                        mod.GetObjectPosition(brain.player),
-                        vPos
-                    )
+                behaviorClass: (brain) => {
+                    const data = getVehicleToDriveInfo(brain)
+                    if (!data) return CoreAI_MoveToBehavior
+                    return data.dist <= 5.0
+                        ? CoreAI_EnterVehicleBehavior
+                        : CoreAI_MoveToBehavior
+                },
+                isSame: (brain, current) => {
+                    const data = getVehicleToDriveInfo(brain)
+                    if (!data) return false
 
-                    if (dist <= 5.0) {
+                    if (current instanceof CoreAI_EnterVehicleBehavior) {
+                        return data.dist <= 5.0
+                    }
+
+                    if (current instanceof CoreAI_MoveToBehavior) {
+                        if (data.dist <= 5.0) return false
+                        return (
+                            mod.DistanceBetween(
+                                current.getTargetPos(),
+                                data.vPos
+                            ) <= 0
+                        )
+                    }
+
+                    return false
+                },
+                factory: (brain) => {
+                    const data = getVehicleToDriveInfo(brain)!
+
+                    if (data.dist <= 5.0) {
                         return new CoreAI_EnterVehicleBehavior(
                             brain,
-                            vehicle,
+                            data.vehicle,
                             0,
                             5.0
                         )
@@ -2151,7 +2187,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
                     return new CoreAI_MoveToBehavior(
                         brain,
-                        vPos,
+                        data.vPos,
                         Math.random() < 0.7
                             ? mod.MoveSpeed.Sprint
                             : mod.MoveSpeed.Run,
@@ -2162,6 +2198,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
             {
                 score: (brain) => (brain.memory.get('arrivedPos') ? 120 : 0),
+                behaviorClass: () => CoreAI_DefendBehavior,
                 factory: (brain) =>
                     new CoreAI_DefendBehavior(
                         brain,
@@ -2173,7 +2210,22 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
             {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
+                behaviorClass: () => CoreAI_MoveToBehavior,
+                isSame: (brain, current) => {
+                    mod.DisplayHighlightedWorldLogMessage(mod.Message(1))
+                    if (!(current instanceof CoreAI_MoveToBehavior))
+                        return false
+
+                    const roamPos = brain.memory.get('roamPos')
+                    if (!roamPos) return false
+
+                    return (
+                        mod.DistanceBetween(current.getTargetPos(), roamPos) <=
+                        0
+                    )
+                },
                 factory: (brain) => {
+                    mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
                     return new CoreAI_MoveToBehavior(
                         brain,
                         brain.memory.get('roamPos')!,
@@ -2373,7 +2425,6 @@ export function OnPlayerLeaveGame(eventNumber: number): void {
     // Custom bots are kicked by the engine after their first death, based on the unspawndelay timer. Respawn the bot here for persistence. If you need to preserve stats (team, kills, deaths, etc.), wrap mod.Player, or check my Scripting Gameplay Framework: https://github.com/nikgodda/bf6-portal-scripting
     const brain = brainManager.get(eventNumber)
     if (brain) {
-        brain.destroy()
         brainManager.delete(eventNumber)
     }
 }
