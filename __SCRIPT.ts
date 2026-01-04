@@ -2359,7 +2359,7 @@ export class CoreAI_CombatantProfile extends CoreAI_BaseProfile {
 //
 //
 //
-//----------- YOUR GAME MODE STARTS HERE
+//                                  YOUR GAME MODE STARTS HERE
 //
 //
 //
