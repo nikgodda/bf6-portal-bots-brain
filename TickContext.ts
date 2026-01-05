@@ -1,19 +1,19 @@
-import { CoreAI_MemoryManager } from '../../Memory/MemoryManager'
+import { CoreAI_MemoryManager } from './Modules/Memory/MemoryManager'
 
 /**
- * CoreAI_SensorContext:
- * Immutable per-tick context passed to all sensors.
+ * CoreAI_TickContext:
+ * Immutable per-tick context passed to sensors and actions.
  *
- * Sensors must ONLY:
+ * Sensors/actions must ONLY:
  * - read from ctx.player / world
- * - write into ctx.memory
+ * - sensors may write into ctx.memory (actions should avoid it)
  *
- * Sensors must NOT:
+ * Sensors/actions must NOT:
  * - control behaviors
  * - reference Brain
  * - trigger actions directly
  */
-export interface CoreAI_SensorContext {
+export interface CoreAI_TickContext {
     /** AI-controlled player */
     player: mod.Player
 

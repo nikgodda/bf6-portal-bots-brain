@@ -1,6 +1,5 @@
-import { CoreUI_Colors } from 'src/Core/UI/UIColors'
 import { CoreAI_ASensor } from './ASensor'
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * FightSensor:
@@ -66,7 +65,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         mod.SetWorldIconColor(this.hitClosestEnemyWI, CoreUI_Colors.BlueDark) */
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         if (ctx.memory.get('isInBattle')) {
             return
         }
@@ -157,8 +156,8 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         }
     }
 
-    override onRayCastHit?(
-        ctx: CoreAI_SensorContext,
+    override OnRayCastHit?(
+        ctx: CoreAI_TickContext,
         eventPoint: mod.Vector,
         eventNormal: mod.Vector
     ): void {
@@ -211,8 +210,8 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         ctx.memory.set('isInBattle', true, this.ttlMs)
     }
 
-    override onDamaged?(
-        ctx: CoreAI_SensorContext,
+    override OnPlayerDamaged?(
+        ctx: CoreAI_TickContext,
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock

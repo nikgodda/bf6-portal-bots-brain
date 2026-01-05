@@ -4,7 +4,6 @@ import { CoreAI_ITaskScoringEntry } from '../Modules/Task/ITaskScoringEntry'
 
 import { CoreAI_FightBehavior } from '../Modules/Behavior/Behaviors/FightBehavior'
 import { CoreAI_DefendBehavior } from '../Modules/Behavior/Behaviors/DefendBehavior'
-import { CoreAI_EnterVehicleBehavior } from '../Modules/Behavior/Behaviors/EnterVehicleBehavior'
 import { CoreAI_MoveToBehavior } from '../Modules/Behavior/Behaviors/MoveToBehavior'
 
 import { CoreAI_FightSensor } from '../Modules/Perception/Sensors/FightSensor'
@@ -21,32 +20,20 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
     constructor(options: CoreAI_BaseProfileOptions = {}) {
         super()
 
-        const getVehicleToDriveInfo = (brain: CoreAI_Brain) => {
-            const vehicle = brain.memory.get('vehicleToDrive')
-            if (!vehicle) return null
-
-            const vPos = mod.GetVehicleState(
-                vehicle,
-                mod.VehicleStateVector.VehiclePosition
-            )
-            const dist = mod.DistanceBetween(
-                mod.GetObjectPosition(brain.player),
-                vPos
-            )
-
-            return { vehicle, vPos, dist }
-        }
-
         this.scoring = [
             {
                 score: (brain) => (brain.memory.get('isInBattle') ? 200 : 0),
+
                 behaviorClass: () => CoreAI_FightBehavior,
+
                 factory: (brain) => new CoreAI_FightBehavior(brain),
             },
 
             {
                 score: (brain) => (brain.memory.get('closestEnemy') ? 150 : 0),
+
                 behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
@@ -61,6 +48,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
                     return mod.DistanceBetween(current.getTargetPos(), pos) <= 0
                 },
+
                 factory: (brain) => {
                     const enemy = brain.memory.get('closestEnemy')!
                     const pos = mod.GetSoldierState(
@@ -79,59 +67,50 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
             {
                 score: (brain) =>
                     brain.memory.get('vehicleToDrive') ? 290 : 0,
-                behaviorClass: (brain) => {
-                    const data = getVehicleToDriveInfo(brain)
-                    if (!data) return CoreAI_MoveToBehavior
-                    return data.dist <= 5.0
-                        ? CoreAI_EnterVehicleBehavior
-                        : CoreAI_MoveToBehavior
-                },
+
+                behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
-                    const data = getVehicleToDriveInfo(brain)
-                    if (!data) return false
+                    if (!(current instanceof CoreAI_MoveToBehavior))
+                        return false
 
-                    if (current instanceof CoreAI_EnterVehicleBehavior) {
-                        return data.dist <= 5.0
-                    }
+                    const vehicle = brain.memory.get('vehicleToDrive')
+                    if (!vehicle) return null
 
-                    if (current instanceof CoreAI_MoveToBehavior) {
-                        if (data.dist <= 5.0) return false
-                        return (
-                            mod.DistanceBetween(
-                                current.getTargetPos(),
-                                data.vPos
-                            ) <= 0
-                        )
-                    }
+                    const vPos = mod.GetVehicleState(
+                        vehicle,
+                        mod.VehicleStateVector.VehiclePosition
+                    )
 
-                    return false
+                    return (
+                        mod.DistanceBetween(current.getTargetPos(), vPos) <= 0
+                    )
                 },
-                factory: (brain) => {
-                    const data = getVehicleToDriveInfo(brain)!
 
-                    if (data.dist <= 5.0) {
-                        return new CoreAI_EnterVehicleBehavior(
-                            brain,
-                            data.vehicle,
-                            0,
-                            5.0
-                        )
-                    }
+                factory: (brain) => {
+                    const vehicle = brain.memory.get('vehicleToDrive')!
+
+                    const vPos = mod.GetVehicleState(
+                        vehicle,
+                        mod.VehicleStateVector.VehiclePosition
+                    )
 
                     return new CoreAI_MoveToBehavior(
                         brain,
-                        data.vPos,
+                        vPos,
                         Math.random() < 0.7
                             ? mod.MoveSpeed.Sprint
                             : mod.MoveSpeed.Run,
-                        false
+                        /* false */
                     )
                 },
             },
 
             {
                 score: (brain) => (brain.memory.get('arrivedPos') ? 120 : 0),
+
                 behaviorClass: () => CoreAI_DefendBehavior,
+
                 factory: (brain) =>
                     new CoreAI_DefendBehavior(
                         brain,
@@ -143,7 +122,9 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
             {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
+
                 behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
@@ -156,6 +137,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                         0
                     )
                 },
+
                 factory: (brain) => {
                     return new CoreAI_MoveToBehavior(
                         brain,

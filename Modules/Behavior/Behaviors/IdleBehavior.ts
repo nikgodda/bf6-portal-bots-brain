@@ -17,7 +17,7 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
         const player = this.brain.player
         
         if (mod.IsPlayerValid(player)) {
-            mod.AIIdleBehavior(player)
+            // mod.AIIdleBehavior(player)
         }
     }
 

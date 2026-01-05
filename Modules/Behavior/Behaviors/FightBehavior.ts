@@ -33,13 +33,7 @@ export class CoreAI_FightBehavior extends CoreAI_ABehavior {
             await mod.Wait(0)
             await mod.Wait(0)
             mod.ForcePlayerToSeat(player, vehicle, 0)
-
-            /* mod.AIDefendPositionBehavior(
-                player,
-                mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition),
-                0,
-                10
-            ) */
+            
             mod.AIBattlefieldBehavior(player)
             return
         }

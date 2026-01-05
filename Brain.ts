@@ -7,7 +7,10 @@ import { CoreAI_AProfile } from './Profiles/AProfile'
 import { CoreAI_ASensor } from './Modules/Perception/Sensors/ASensor'
 import { CoreAI_DebugWI } from './Modules/Debug/DebugWI'
 import { CoreAI_FightSensor } from './Modules/Perception/Sensors/FightSensor'
-import { CoreAI_SensorContext } from './Modules/Perception/Sensors/SensorContext'
+import { CoreAI_TickContext } from './TickContext'
+import { CoreAI_ActionRunner } from './Modules/Action/ActionRunner'
+import { CoreAI_SetTargetAction } from './Modules/Action/Actions/SetTargetAction'
+import { CoreAI_EnterVehicleAction } from './Modules/Action/Actions/EnterVehicleAction'
 
 /**
  * CoreAI_Brain
@@ -39,6 +42,7 @@ export class CoreAI_Brain {
     public taskSelector: CoreAI_TaskSelector
 
     private debugWI: CoreAI_DebugWI | null = null
+    private actionRunner: CoreAI_ActionRunner
 
     constructor(
         player: mod.Player,
@@ -51,6 +55,10 @@ export class CoreAI_Brain {
         this.perception = new CoreAI_Perception()
         this.behaviorController = new CoreAI_BehaviorController(this)
         this.taskSelector = new CoreAI_TaskSelector(this, profile)
+        this.actionRunner = new CoreAI_ActionRunner([
+            new CoreAI_SetTargetAction(),
+            new CoreAI_EnterVehicleAction(),
+        ])
 
         if (enableDebug)
             this.debugWI = new CoreAI_DebugWI(
@@ -108,6 +116,7 @@ export class CoreAI_Brain {
         this.perception.reset()
         this.memory.reset()
         this.behaviorController.resetAll()
+        this.actionRunner.reset()
 
         if (mod.IsPlayerValid(this.player)) {
             mod.AISetTarget(this.player)
@@ -119,6 +128,7 @@ export class CoreAI_Brain {
      * ------------------------------------------------------------ */
 
     OnAIMoveFinished(success: boolean): void {
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(123))
         this.memory.set('roamPos', null)
     }
 
@@ -134,14 +144,14 @@ export class CoreAI_Brain {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        fightSensor.onDamaged?.(
-            sensorCtx,
+        fightSensor.OnPlayerDamaged?.(
+            tickCtx,
             eventOtherPlayer,
             eventDamageType,
             eventWeaponUnlock
@@ -156,13 +166,13 @@ export class CoreAI_Brain {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        fightSensor.onRayCastHit?.(sensorCtx, eventPoint, eventNormal)
+        fightSensor.OnRayCastHit?.(tickCtx, eventPoint, eventNormal)
     }
 
     /* ------------------------------------------------------------
@@ -181,22 +191,16 @@ export class CoreAI_Brain {
             return
         }
 
-        this.debugWI?.update()
+        this.debugWI?.tick()
 
-        const enemy = this.memory.get('closestEnemy')
-        if (enemy && mod.IsPlayerValid(enemy)) {
-            mod.AISetTarget(this.player, enemy)
-        } else {
-            mod.AISetTarget(this.player)
-        }
-
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        this.perception.update(sensorCtx)
+        this.perception.tick(tickCtx)
+        this.actionRunner.tick(tickCtx)
 
         const next = this.taskSelector.chooseNextBehavior()
 

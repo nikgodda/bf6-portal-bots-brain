@@ -1,5 +1,5 @@
 import { CoreAI_ASensor } from './ASensor'
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * RoamSensor:
@@ -33,7 +33,7 @@ export class CoreAI_RoamSensor extends CoreAI_ASensor {
         this.lastIntentDir = null
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         // Do not reselect while intent exists
         if (ctx.memory.get('roamPos')) {
             return

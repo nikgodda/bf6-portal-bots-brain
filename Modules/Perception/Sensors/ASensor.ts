@@ -1,4 +1,4 @@
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * ASensor:
@@ -25,7 +25,7 @@ export abstract class CoreAI_ASensor {
      * Called by Perception each tick.
      * Applies throttling logic and calls update().
      */
-    tick(ctx: CoreAI_SensorContext): void {
+    tick(ctx: CoreAI_TickContext): void {
         const now = ctx.time // unified tick time
 
         if (now - this.lastUpdate < this.updateRate) {
@@ -43,21 +43,21 @@ export abstract class CoreAI_ASensor {
     /**
      * To be implemented by concrete sensors.
      */
-    protected abstract update(ctx: CoreAI_SensorContext): void
+    protected abstract update(ctx: CoreAI_TickContext): void
 
     /**
      * Optional event hooks for sensors that react to game events.
      * (FightSensor overrides onDamaged)
      */
-    onDamaged?(
-        ctx: CoreAI_SensorContext,
+    OnPlayerDamaged?(
+        ctx: CoreAI_TickContext,
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock
     ): void {}
 
-    onRayCastHit?(
-        ctx: CoreAI_SensorContext,
+    OnRayCastHit?(
+        ctx: CoreAI_TickContext,
         eventPoint: mod.Vector,
         eventNormal: mod.Vector
     ): void {}

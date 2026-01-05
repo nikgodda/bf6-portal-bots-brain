@@ -59,8 +59,7 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
         await mod.Wait(0)
         await mod.Wait(0)
         mod.ForcePlayerToSeat(player, vehicle, 0)
-        mod.AISetMoveSpeed(player, mod.MoveSpeed.Sprint)
-        // mod.AIBattlefieldBehavior(player)
+
         mod.AIDefendPositionBehavior(player, this.roamPos, 0, 4)
         // mod.AIValidatedMoveToBehavior(player, this.targetPos)
     }
@@ -78,13 +77,6 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
         const memPos = this.brain.memory.get('roamPos')
         if (!memPos) return
-
-        /* 
-        // Conflicts with other Scores
-        if (!mod.Equals(memPos, this.roamPos)) {
-            this.roamPos = memPos
-            this.enter()
-        } */
 
         const myPos = mod.GetObjectPosition(player)
         const dist = mod.DistanceBetween(myPos, this.roamPos)
