@@ -2,7 +2,7 @@ import { CoreAI_ASensor } from './ASensor'
 import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
- * FightSensor:
+ * BattleSensor:
  * Detects combat by raycasting toward nearby enemies.
  *
  * Writes:
@@ -14,7 +14,7 @@ import { CoreAI_TickContext } from '../../../TickContext'
  * - No behaviors spawned.
  * - TaskSelector checks memory.isInBattle to understand combat state.
  */
-export class CoreAI_FightSensor extends CoreAI_ASensor {
+export class CoreAI_BattleSensor extends CoreAI_ASensor {
     /* private targetWI: mod.WorldIcon
     private startWI: mod.WorldIcon
     private hitWI: mod.WorldIcon

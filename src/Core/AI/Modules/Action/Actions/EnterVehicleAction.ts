@@ -2,8 +2,6 @@ import { CoreAI_AAction } from '../AAction'
 import { CoreAI_TickContext } from '../../../TickContext'
 
 export class CoreAI_EnterVehicleAction extends CoreAI_AAction {
-    // private lastEnterTime = 0
-
     constructor() {
         super(500)
     }
@@ -34,15 +32,10 @@ export class CoreAI_EnterVehicleAction extends CoreAI_AAction {
 
         const dist = mod.DistanceBetween(pPos, vPos)
 
-        if (dist > 5.0) return
+        if (dist > 3.0) return
 
-        /* if (ctx.time - this.lastEnterTime < 5000) {
-            return
-        } */
-
-        mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
+        // mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
 
         mod.ForcePlayerToSeat(player, vehicle, 0)
-        // this.lastEnterTime = ctx.time
     }
 }

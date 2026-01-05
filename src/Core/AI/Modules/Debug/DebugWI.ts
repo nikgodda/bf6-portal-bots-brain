@@ -4,7 +4,7 @@ import { CoreAI_MemoryFields } from '../Memory/MemoryManager'
 
 // @stringkeys core.ai.debug.brain.memory: closestEnemy {}, vehicleToDrive {}, isInBattle {}, roamPos {}, arrivedPos {}
 
-// @stringkeys core.ai.debug.brain.behaviors: fight, defend, idle, moveto, entervehicle
+// @stringkeys core.ai.debug.brain.behaviors: battlefield, defend, moveto, none
 
 export interface CoreAI_IDebugWI {
     index: number
@@ -22,11 +22,10 @@ export class CoreAI_DebugWI {
 
     private behaviorWI: mod.WorldIcon
     private behaviorColorsMap: Map<string, mod.Vector> = new Map([
-        ['fight', mod.CreateVector(1, 0, 0)],
+        ['battlefield', mod.CreateVector(1, 0, 0)],
         ['defend', mod.CreateVector(1, 1, 0)],
-        ['idle', mod.CreateVector(1, 1, 1)],
         ['moveto', mod.CreateVector(0, 1, 1)],
-        ['entervehicle', mod.CreateVector(0, 1, 0)],
+        ['none', mod.CreateVector(1, 1, 1)],
     ])
 
     private roamPosWI: mod.WorldIcon
@@ -107,19 +106,15 @@ export class CoreAI_DebugWI {
                     mod.ZComponentOf(mod.GetObjectPosition(this.brain.player))
                 )
             )
+            const behavior = this.brain.getBehaviorLabel() ?? 'none'
             mod.SetWorldIconText(
                 this.behaviorWI,
-                mod.Message(
-                    `core.ai.debug.brain.behaviors.${
-                        this.brain.behaviorController.currentBehavior().name
-                    }`
-                )
+                mod.Message(`core.ai.debug.brain.behaviors.${behavior}`)
             )
             mod.SetWorldIconColor(
                 this.behaviorWI,
-                this.behaviorColorsMap.get(
-                    this.brain.behaviorController.currentBehavior().name
-                )!
+                this.behaviorColorsMap.get(behavior) ??
+                    mod.CreateVector(1, 1, 1)
             )
         } else {
             mod.EnableWorldIconText(this.behaviorWI, false)
