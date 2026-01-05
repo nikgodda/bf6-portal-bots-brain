@@ -47,7 +47,7 @@ export abstract class CoreAI_ASensor {
 
     /**
      * Optional event hooks for sensors that react to game events.
-     * (FightSensor overrides onDamaged)
+     * (BattleSensor overrides onDamaged)
      */
     OnPlayerDamaged?(
         ctx: CoreAI_TickContext,
