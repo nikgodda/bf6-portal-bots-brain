@@ -1,5 +1,5 @@
 import { CoreAI_ASensor } from './ASensor'
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * ClosestEnemySensor:
@@ -23,7 +23,7 @@ export class CoreAI_ClosestEnemySensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
 
@@ -39,7 +39,6 @@ export class CoreAI_ClosestEnemySensor extends CoreAI_ASensor {
         if (!mod.IsPlayerValid(newEnemy)) {
             // Clear enemy memory (TTL = immediate)
             ctx.memory.set('closestEnemy', null)
-            // ctx.memory.set('roamPos', null)
             return
         }
 
@@ -59,3 +58,6 @@ export class CoreAI_ClosestEnemySensor extends CoreAI_ASensor {
         ctx.memory.set('closestEnemy', newEnemy, this.ttlMs)
     }
 }
+
+
+

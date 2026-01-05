@@ -81,7 +81,7 @@ export class CoreAI_DebugWI {
         mod.SetWorldIconColor(this.vehicleToDriveWI, mod.CreateVector(1, 1, 0))
     }
 
-    update() {
+    tick() {
         const isValid =
             mod.IsPlayerValid(this.brain.player) &&
             mod.GetSoldierState(this.brain.player, mod.SoldierStateBool.IsAlive)

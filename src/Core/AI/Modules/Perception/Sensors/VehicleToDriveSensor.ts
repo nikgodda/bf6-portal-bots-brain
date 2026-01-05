@@ -1,5 +1,5 @@
 import { CoreAI_ASensor } from './ASensor'
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * VehicleToDriveSensor:
@@ -17,7 +17,7 @@ export class CoreAI_VehicleToDriveSensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle)) {

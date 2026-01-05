@@ -1,5 +1,5 @@
 import { CoreAI_ASensor } from './ASensor'
-import { CoreAI_SensorContext } from './SensorContext'
+import { CoreAI_TickContext } from '../../../TickContext'
 
 /**
  * ArrivalSensor:
@@ -28,7 +28,7 @@ export class CoreAI_ArrivalSensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const memory = ctx.memory
         const player = ctx.player
 

@@ -1,7 +1,7 @@
 // src/Core/AI/Modules/Perception/Perception.ts
 
 import { CoreAI_ASensor } from './Sensors/ASensor'
-import { CoreAI_SensorContext } from './Sensors/SensorContext'
+import { CoreAI_TickContext } from '../../TickContext'
 
 /**
  * Perception:
@@ -21,7 +21,7 @@ export class CoreAI_Perception {
     constructor() {}
 
     /** Called every tick by Brain. */
-    update(ctx: CoreAI_SensorContext): void {
+    tick(ctx: CoreAI_TickContext): void {
         for (const s of this.sensors) {
             s.tick(ctx)
         }
@@ -71,3 +71,6 @@ export class CoreAI_Perception {
         this.sensors = []
     }
 }
+
+
+
