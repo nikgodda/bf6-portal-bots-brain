@@ -5,10 +5,9 @@
         "brain": {
           "behaviors": {
             "defend": "defend",
-            "entervehicle": "entervehicle",
-            "fight": "fight",
-            "idle": "idle",
-            "moveto": "moveto"
+            "moveto": "moveto",
+            "battlefield": "battlefield",
+            "none": "none"
           },
           "distance": "dis: {} | tea: {}",
           "memory": {
