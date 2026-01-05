@@ -15,7 +15,7 @@
 [node name="MP_Tungsten" type="Node3D"]
 
 [node name="TEAM_1_HQ" parent="." node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_efuah")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -385.299, 84.9766, -69.314)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -365.058, 85.174, -174.63)
 AltTeam = 0
 ObjId = 1
 HQArea = NodePath("HQ_Team1")
@@ -38,7 +38,7 @@ transform = Transform3D(-0.0428871, 0, 0.99908, 0, 1, 0, -0.99908, 0, -0.0428871
 transform = Transform3D(0.0841819, 0, -0.99645, 0, 1, 0, 0.99645, 0, 0.0841819, 0, 0, 3)
 
 [node name="TEAM_2_HQ" parent="." node_paths=PackedStringArray("HQArea", "InfantrySpawns") instance=ExtResource("1_efuah")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3563, 85.5227, -109.357)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.36429, 90.1536, -179.212)
 Team = 2
 AltTeam = 0
 ObjId = 2
@@ -82,43 +82,29 @@ metadata/_edit_lock_ = true
 [node name="MP_Tungsten_Assets" parent="Static" instance=ExtResource("7_g8pqu")]
 metadata/_edit_lock_ = true
 
-[node name="AmmoChest_Small_Int_01" parent="." instance=ExtResource("8_rwkq4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -151.536, 88.2267, -257.638)
-ObjId = 1106
-
-[node name="AmmoChest_Small_Int_02" parent="." instance=ExtResource("8_rwkq4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -170.268, 87.4848, -121.779)
-ObjId = 1107
-
 [node name="VehicleSpawner" parent="." instance=ExtResource("9_5m1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -350.912, 87.0029, -104.795)
 ObjId = 1
-P_AutoSpawnEnabled = true
 
 [node name="VehicleSpawner3" parent="." instance=ExtResource("9_5m1py")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -370.54, 86.7244, -83.6449)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -287.117, 86.4269, -169.396)
 ObjId = 2
-P_AutoSpawnEnabled = true
 
 [node name="VehicleSpawner2" parent="." instance=ExtResource("9_5m1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.9834, 87.8865, -96.0757)
 ObjId = 3
-P_AutoSpawnEnabled = true
 
 [node name="VehicleSpawner4" parent="." instance=ExtResource("9_5m1py")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.104, 87.8865, -129.128)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.0814, 91.2807, -164.312)
 ObjId = 4
-P_AutoSpawnEnabled = true
 
 [node name="VehicleSpawner5" parent="." instance=ExtResource("9_5m1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0663, 87.8865, -82.8214)
 ObjId = 5
-P_AutoSpawnEnabled = true
 
 [node name="VehicleSpawner6" parent="." instance=ExtResource("9_5m1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.002, 87.8865, -63.1374)
 ObjId = 6
-P_AutoSpawnEnabled = true
 
 [node name="CapturePoint" parent="." node_paths=PackedStringArray("CaptureArea") instance=ExtResource("10_34cb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300.848, 83.6752, -66.9404)
@@ -144,3 +130,42 @@ height = 20.0
 [node name="Sector" parent="." node_paths=PackedStringArray("CapturePoints") instance=ExtResource("11_7vkr3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -229.806, 77.251, 55.6274)
 CapturePoints = [NodePath("../CapturePoint"), NodePath("../CapturePoint2")]
+
+[node name="InfantryWPs" type="Node3D" parent="."]
+
+[node name="AmmoChest_Small_Int_01" parent="InfantryWPs" instance=ExtResource("8_rwkq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -242.658, 84.1575, -226.459)
+ObjId = 1001
+
+[node name="PolygonVolume" parent="InfantryWPs/AmmoChest_Small_Int_01" instance=ExtResource("2_5m1py")]
+points = PackedVector2Array(0.127716, -5.99748, -5, 5, 5, 5)
+
+[node name="AmmoChest_Small_Int_02" parent="InfantryWPs" instance=ExtResource("8_rwkq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -94.4278, 90.5805, -244.783)
+ObjId = 1002
+
+[node name="PolygonVolume" parent="InfantryWPs/AmmoChest_Small_Int_02" instance=ExtResource("2_5m1py")]
+points = PackedVector2Array(0.127716, -5.99748, -5, 5, 5, 5)
+
+[node name="AmmoChest_Small_Int_03" parent="InfantryWPs" instance=ExtResource("8_rwkq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -181.745, 87.159, -329.778)
+ObjId = 1003
+
+[node name="PolygonVolume" parent="InfantryWPs/AmmoChest_Small_Int_03" instance=ExtResource("2_5m1py")]
+points = PackedVector2Array(0.127716, -5.99748, -5, 5, 5, 5)
+
+[node name="VehicleWPs" type="Node3D" parent="."]
+
+[node name="AmmoChest_Small_Int_01" parent="VehicleWPs" instance=ExtResource("8_rwkq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -151.536, 87.8281, -257.638)
+ObjId = 1106
+
+[node name="PolygonVolume" parent="VehicleWPs/AmmoChest_Small_Int_01" instance=ExtResource("2_5m1py")]
+points = PackedVector2Array(-4.72917, -0.482086, -2.70894, 4.56847, 3.16809, 4.56847, 5.05057, -0.665771, -0.137741, -4.84396)
+
+[node name="AmmoChest_Small_Int_02" parent="VehicleWPs" instance=ExtResource("8_rwkq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -170.268, 87.1624, -121.779)
+ObjId = 1107
+
+[node name="PolygonVolume" parent="VehicleWPs/AmmoChest_Small_Int_02" instance=ExtResource("2_5m1py")]
+points = PackedVector2Array(-4.72917, -0.482086, -2.70894, 4.56847, 3.16809, 4.56847, 5.05057, -0.665771, -0.137741, -4.84396)

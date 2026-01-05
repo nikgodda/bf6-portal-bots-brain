@@ -28,9 +28,9 @@
                 "z": 1
             },
             "position": {
-                "x": -385.299,
-                "y": 84.9766,
-                "z": -69.314
+                "x": -365.058,
+                "y": 85.174,
+                "z": -174.63
             },
             "id": "TEAM_1_HQ",
             "linked": [
@@ -45,24 +45,24 @@
             "height": 0,
             "points": [
                 {
-                    "x": -380.299,
-                    "y": 89.9766,
-                    "z": -64.314
+                    "x": -360.058,
+                    "y": 90.174,
+                    "z": -169.63
                 },
                 {
-                    "x": -380.299,
-                    "y": 89.9766,
-                    "z": -74.314
+                    "x": -360.058,
+                    "y": 90.174,
+                    "z": -179.63
                 },
                 {
-                    "x": -390.299,
-                    "y": 89.9766,
-                    "z": -74.314
+                    "x": -370.058,
+                    "y": 90.174,
+                    "z": -179.63
                 },
                 {
-                    "x": -390.299,
-                    "y": 89.9766,
-                    "z": -64.314
+                    "x": -370.058,
+                    "y": 90.174,
+                    "z": -169.63
                 }
             ]
         },
@@ -85,9 +85,9 @@
                 "z": 0.999884
             },
             "position": {
-                "x": -385.299,
-                "y": 84.9766,
-                "z": -72.314
+                "x": -365.058,
+                "y": 85.174,
+                "z": -177.63
             },
             "id": "TEAM_1_HQ/SpawnPoint_1_1"
         },
@@ -110,9 +110,9 @@
                 "z": -0.9995
             },
             "position": {
-                "x": -382.299,
-                "y": 84.9766,
-                "z": -69.314
+                "x": -362.058,
+                "y": 85.174,
+                "z": -174.63
             },
             "id": "TEAM_1_HQ/SpawnPoint_1_2"
         },
@@ -135,9 +135,9 @@
                 "z": -0.0428871
             },
             "position": {
-                "x": -388.299,
-                "y": 84.9766,
-                "z": -69.314
+                "x": -368.058,
+                "y": 85.174,
+                "z": -174.63
             },
             "id": "TEAM_1_HQ/SpawnPoint_1_3"
         },
@@ -160,9 +160,9 @@
                 "z": 0.0841819
             },
             "position": {
-                "x": -385.299,
-                "y": 84.9766,
-                "z": -66.314
+                "x": -365.058,
+                "y": 85.174,
+                "z": -171.63
             },
             "id": "TEAM_1_HQ/SpawnPoint_1_4"
         },
@@ -195,9 +195,9 @@
                 "z": 1
             },
             "position": {
-                "x": -10.3563,
-                "y": 85.5227,
-                "z": -109.357
+                "x": 5.36429,
+                "y": 90.1536,
+                "z": -179.212
             },
             "id": "TEAM_2_HQ",
             "linked": [
@@ -212,24 +212,24 @@
             "height": 0,
             "points": [
                 {
-                    "x": -5.3563,
-                    "y": 90.5227,
-                    "z": -104.357
+                    "x": 10.36429,
+                    "y": 95.1536,
+                    "z": -174.212
                 },
                 {
-                    "x": -5.3563,
-                    "y": 90.5227,
-                    "z": -114.357
+                    "x": 10.36429,
+                    "y": 95.1536,
+                    "z": -184.212
                 },
                 {
-                    "x": -15.3563,
-                    "y": 90.5227,
-                    "z": -114.357
+                    "x": 0.36429,
+                    "y": 95.1536,
+                    "z": -184.212
                 },
                 {
-                    "x": -15.3563,
-                    "y": 90.5227,
-                    "z": -104.357
+                    "x": 0.36429,
+                    "y": 95.1536,
+                    "z": -174.212
                 }
             ]
         },
@@ -252,9 +252,9 @@
                 "z": 0.87795
             },
             "position": {
-                "x": -10.3563,
-                "y": 85.5227,
-                "z": -112.357
+                "x": 5.36429,
+                "y": 90.1536,
+                "z": -182.212
             },
             "id": "TEAM_2_HQ/SpawnPoint_2_1"
         },
@@ -277,9 +277,9 @@
                 "z": -0.997604
             },
             "position": {
-                "x": -7.3563,
-                "y": 85.5227,
-                "z": -109.357
+                "x": 8.36429,
+                "y": 90.1536,
+                "z": -179.212
             },
             "id": "TEAM_2_HQ/SpawnPoint_2_2"
         },
@@ -302,9 +302,9 @@
                 "z": 0.162758
             },
             "position": {
-                "x": -13.3563,
-                "y": 85.5227,
-                "z": -109.357
+                "x": 2.36429,
+                "y": 90.1536,
+                "z": -179.212
             },
             "id": "TEAM_2_HQ/SpawnPoint_2_3"
         },
@@ -327,9 +327,9 @@
                 "z": -0.165771
             },
             "position": {
-                "x": -10.3563,
-                "y": 85.5227,
-                "z": -106.357
+                "x": 5.36429,
+                "y": 90.1536,
+                "z": -176.212
             },
             "id": "TEAM_2_HQ/SpawnPoint_2_4"
         },
@@ -536,61 +536,8 @@
             "id": "Camera3D/DeployCam"
         },
         {
-            "name": "AmmoChest_Small_Int_01",
-            "ObjId": 1106,
-            "type": "AmmoChest_Small_Int_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -151.536,
-                "y": 88.2267,
-                "z": -257.638
-            },
-            "id": "AmmoChest_Small_Int_01"
-        },
-        {
-            "name": "AmmoChest_Small_Int_02",
-            "ObjId": 1107,
-            "type": "AmmoChest_Small_Int_01",
-            "right": {
-                "x": 1,
-                "y": 0,
-                "z": 0
-            },
-            "up": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-            },
-            "front": {
-                "x": 0,
-                "y": 0,
-                "z": 1
-            },
-            "position": {
-                "x": -170.268,
-                "y": 87.4848,
-                "z": -121.779
-            },
-            "id": "AmmoChest_Small_Int_02"
-        },
-        {
             "name": "VehicleSpawner",
             "ObjId": 1,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -617,7 +564,6 @@
         {
             "name": "VehicleSpawner3",
             "ObjId": 2,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -635,16 +581,15 @@
                 "z": 1
             },
             "position": {
-                "x": -370.54,
-                "y": 86.7244,
-                "z": -83.6449
+                "x": -287.117,
+                "y": 86.4269,
+                "z": -169.396
             },
             "id": "VehicleSpawner3"
         },
         {
             "name": "VehicleSpawner2",
             "ObjId": 3,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -671,7 +616,6 @@
         {
             "name": "VehicleSpawner4",
             "ObjId": 4,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -689,16 +633,15 @@
                 "z": 1
             },
             "position": {
-                "x": -25.104,
-                "y": 87.8865,
-                "z": -129.128
+                "x": -29.0814,
+                "y": 91.2807,
+                "z": -164.312
             },
             "id": "VehicleSpawner4"
         },
         {
             "name": "VehicleSpawner5",
             "ObjId": 5,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -725,7 +668,6 @@
         {
             "name": "VehicleSpawner6",
             "ObjId": 6,
-            "P_AutoSpawnEnabled": true,
             "type": "VehicleSpawner",
             "right": {
                 "x": 1,
@@ -896,6 +838,271 @@
             "id": "Sector",
             "linked": [
                 "CapturePoints"
+            ]
+        },
+        {
+            "name": "AmmoChest_Small_Int_01",
+            "ObjId": 1001,
+            "type": "AmmoChest_Small_Int_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -242.658,
+                "y": 84.1575,
+                "z": -226.459
+            },
+            "id": "InfantryWPs/AmmoChest_Small_Int_01"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "InfantryWPs/AmmoChest_Small_Int_01/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -242.530284,
+                    "y": 84.1575,
+                    "z": -232.45648
+                },
+                {
+                    "x": -247.658,
+                    "y": 84.1575,
+                    "z": -221.459
+                },
+                {
+                    "x": -237.658,
+                    "y": 84.1575,
+                    "z": -221.459
+                }
+            ]
+        },
+        {
+            "name": "AmmoChest_Small_Int_02",
+            "ObjId": 1002,
+            "type": "AmmoChest_Small_Int_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -94.4278,
+                "y": 90.5805,
+                "z": -244.783
+            },
+            "id": "InfantryWPs/AmmoChest_Small_Int_02"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "InfantryWPs/AmmoChest_Small_Int_02/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -94.300084,
+                    "y": 90.5805,
+                    "z": -250.78048
+                },
+                {
+                    "x": -99.4278,
+                    "y": 90.5805,
+                    "z": -239.783
+                },
+                {
+                    "x": -89.4278,
+                    "y": 90.5805,
+                    "z": -239.783
+                }
+            ]
+        },
+        {
+            "name": "AmmoChest_Small_Int_03",
+            "ObjId": 1003,
+            "type": "AmmoChest_Small_Int_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -181.745,
+                "y": 87.159,
+                "z": -329.778
+            },
+            "id": "InfantryWPs/AmmoChest_Small_Int_03"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "InfantryWPs/AmmoChest_Small_Int_03/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -181.617284,
+                    "y": 87.159,
+                    "z": -335.77548
+                },
+                {
+                    "x": -186.745,
+                    "y": 87.159,
+                    "z": -324.778
+                },
+                {
+                    "x": -176.745,
+                    "y": 87.159,
+                    "z": -324.778
+                }
+            ]
+        },
+        {
+            "name": "AmmoChest_Small_Int_01",
+            "ObjId": 1106,
+            "type": "AmmoChest_Small_Int_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -151.536,
+                "y": 87.8281,
+                "z": -257.638
+            },
+            "id": "VehicleWPs/AmmoChest_Small_Int_01"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "VehicleWPs/AmmoChest_Small_Int_01/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -156.26517,
+                    "y": 87.8281,
+                    "z": -258.120086
+                },
+                {
+                    "x": -154.24494,
+                    "y": 87.8281,
+                    "z": -253.06953
+                },
+                {
+                    "x": -148.36791,
+                    "y": 87.8281,
+                    "z": -253.06953
+                },
+                {
+                    "x": -146.48543,
+                    "y": 87.8281,
+                    "z": -258.303771
+                },
+                {
+                    "x": -151.673741,
+                    "y": 87.8281,
+                    "z": -262.48196
+                }
+            ]
+        },
+        {
+            "name": "AmmoChest_Small_Int_02",
+            "ObjId": 1107,
+            "type": "AmmoChest_Small_Int_01",
+            "right": {
+                "x": 1,
+                "y": 0,
+                "z": 0
+            },
+            "up": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "front": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "position": {
+                "x": -170.268,
+                "y": 87.1624,
+                "z": -121.779
+            },
+            "id": "VehicleWPs/AmmoChest_Small_Int_02"
+        },
+        {
+            "name": "PolygonVolume",
+            "type": "PolygonVolume",
+            "id": "VehicleWPs/AmmoChest_Small_Int_02/PolygonVolume",
+            "height": 0,
+            "points": [
+                {
+                    "x": -174.99717,
+                    "y": 87.1624,
+                    "z": -122.261086
+                },
+                {
+                    "x": -172.97694,
+                    "y": 87.1624,
+                    "z": -117.21053
+                },
+                {
+                    "x": -167.09991,
+                    "y": 87.1624,
+                    "z": -117.21053
+                },
+                {
+                    "x": -165.21743,
+                    "y": 87.1624,
+                    "z": -122.444771
+                },
+                {
+                    "x": -170.405741,
+                    "y": 87.1624,
+                    "z": -126.62296
+                }
             ]
         }
     ],

@@ -131,19 +131,19 @@ export class CoreAI_MemoryManager {
 }
 
 /**
- * CoreAI_SensorContext:
- * Immutable per-tick context passed to all sensors.
+ * CoreAI_TickContext:
+ * Immutable per-tick context passed to sensors and actions.
  *
- * Sensors must ONLY:
+ * Sensors/actions must ONLY:
  * - read from ctx.player / world
- * - write into ctx.memory
+ * - sensors may write into ctx.memory (actions should avoid it)
  *
- * Sensors must NOT:
+ * Sensors/actions must NOT:
  * - control behaviors
  * - reference Brain
  * - trigger actions directly
  */
-export interface CoreAI_SensorContext {
+export interface CoreAI_TickContext {
     /** AI-controlled player */
     player: mod.Player
 
@@ -179,7 +179,7 @@ export abstract class CoreAI_ASensor {
      * Called by Perception each tick.
      * Applies throttling logic and calls update().
      */
-    tick(ctx: CoreAI_SensorContext): void {
+    tick(ctx: CoreAI_TickContext): void {
         const now = ctx.time // unified tick time
 
         if (now - this.lastUpdate < this.updateRate) {
@@ -197,21 +197,21 @@ export abstract class CoreAI_ASensor {
     /**
      * To be implemented by concrete sensors.
      */
-    protected abstract update(ctx: CoreAI_SensorContext): void
+    protected abstract update(ctx: CoreAI_TickContext): void
 
     /**
      * Optional event hooks for sensors that react to game events.
      * (FightSensor overrides onDamaged)
      */
-    onDamaged?(
-        ctx: CoreAI_SensorContext,
+    OnPlayerDamaged?(
+        ctx: CoreAI_TickContext,
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock
     ): void {}
 
-    onRayCastHit?(
-        ctx: CoreAI_SensorContext,
+    OnRayCastHit?(
+        ctx: CoreAI_TickContext,
         eventPoint: mod.Vector,
         eventNormal: mod.Vector
     ): void {}
@@ -222,7 +222,6 @@ export abstract class CoreAI_ASensor {
 }
 
 // src/Core/AI/Modules/Perception/Perception.ts
-
 
 /**
  * Perception:
@@ -242,7 +241,7 @@ export class CoreAI_Perception {
     constructor() {}
 
     /** Called every tick by Brain. */
-    update(ctx: CoreAI_SensorContext): void {
+    tick(ctx: CoreAI_TickContext): void {
         for (const s of this.sensors) {
             s.tick(ctx)
         }
@@ -352,9 +351,9 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 
     override enter(): void {
         const player = this.brain.player
-        
+
         if (mod.IsPlayerValid(player)) {
-            mod.AIIdleBehavior(player)
+            // mod.AIIdleBehavior(player)
         }
     }
 
@@ -369,7 +368,6 @@ export class CoreAI_IdleBehavior extends CoreAI_ABehavior {
 }
 
 // src/Core/AI/Modules/Behavior/BehaviorController.ts
-
 
 export type CoreAI_BehaviorMode = 'onFoot' | 'onDrive'
 
@@ -435,7 +433,6 @@ export class CoreAI_BehaviorController {
 
 // src/Core/AI/Modules/Task/ITaskScoringEntry.ts
 
-
 /**
  * CoreAI_ITaskScoringEntry:
  * - score(brain): returns utility score for this behavior.
@@ -449,7 +446,9 @@ export class CoreAI_BehaviorController {
  */
 export interface CoreAI_ITaskScoringEntry {
     score: (brain: CoreAI_Brain) => number
-    behaviorClass?: (brain: CoreAI_Brain) => new (...args: any[]) => CoreAI_ABehavior
+    behaviorClass?: (
+        brain: CoreAI_Brain
+    ) => new (...args: any[]) => CoreAI_ABehavior
     isSame?: (brain: CoreAI_Brain, current: CoreAI_ABehavior) => boolean
     factory: (brain: CoreAI_Brain) => CoreAI_ABehavior
 }
@@ -665,7 +664,7 @@ export class CoreAI_DebugWI {
         mod.SetWorldIconColor(this.vehicleToDriveWI, mod.CreateVector(1, 1, 0))
     }
 
-    update() {
+    tick() {
         const isValid =
             mod.IsPlayerValid(this.brain.player) &&
             mod.GetSoldierState(this.brain.player, mod.SoldierStateBool.IsAlive)
@@ -917,7 +916,7 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         mod.SetWorldIconColor(this.hitClosestEnemyWI, CoreUI_Colors.BlueDark) */
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         if (ctx.memory.get('isInBattle')) {
             return
         }
@@ -1008,8 +1007,8 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         }
     }
 
-    override onRayCastHit?(
-        ctx: CoreAI_SensorContext,
+    override OnRayCastHit?(
+        ctx: CoreAI_TickContext,
         eventPoint: mod.Vector,
         eventNormal: mod.Vector
     ): void {
@@ -1062,13 +1061,123 @@ export class CoreAI_FightSensor extends CoreAI_ASensor {
         ctx.memory.set('isInBattle', true, this.ttlMs)
     }
 
-    override onDamaged?(
-        ctx: CoreAI_SensorContext,
+    override OnPlayerDamaged?(
+        ctx: CoreAI_TickContext,
         eventOtherPlayer: mod.Player,
         eventDamageType: mod.DamageType,
         eventWeaponUnlock: mod.WeaponUnlock
     ): void {
         ctx.memory.set('isInBattle', true, this.ttlMs)
+    }
+}
+
+export abstract class CoreAI_AAction {
+    protected intervalMs: number
+    private lastRun: number = 0
+
+    constructor(intervalMs: number = 500) {
+        this.intervalMs = intervalMs
+    }
+
+    tick(ctx: CoreAI_TickContext): void {
+        const now = ctx.time
+
+        if (this.intervalMs > 0 && now - this.lastRun < this.intervalMs) {
+            return
+        }
+
+        this.lastRun = now
+        this.update(ctx)
+    }
+
+    reset(): void {
+        this.lastRun = 0
+    }
+
+    protected abstract update(ctx: CoreAI_TickContext): void
+}
+
+export class CoreAI_ActionRunner {
+    private actions: CoreAI_AAction[] = []
+
+    constructor(actions: CoreAI_AAction[]) {
+        this.actions = actions
+    }
+
+    tick(ctx: CoreAI_TickContext): void {
+        for (const action of this.actions) {
+            action.tick(ctx)
+        }
+    }
+
+    reset(): void {
+        for (const action of this.actions) {
+            action.reset()
+        }
+    }
+}
+
+export class CoreAI_SetTargetAction extends CoreAI_AAction {
+    constructor() {
+        super(200)
+    }
+
+    protected update(ctx: CoreAI_TickContext): void {
+        const player = ctx.player
+        if (!mod.IsPlayerValid(player)) return
+
+        const enemy = ctx.memory.get('closestEnemy')
+        if (enemy && mod.IsPlayerValid(enemy)) {
+            mod.AISetTarget(player, enemy)
+        } else {
+            mod.AISetTarget(player)
+        }
+    }
+}
+
+export class CoreAI_EnterVehicleAction extends CoreAI_AAction {
+    // private lastEnterTime = 0
+
+    constructor() {
+        super(500)
+    }
+
+    protected update(ctx: CoreAI_TickContext): void {
+        const player = ctx.player
+        if (!mod.IsPlayerValid(player)) return
+
+        if (mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle)) {
+            return
+        }
+
+        const vehicle = ctx.memory.get('vehicleToDrive')
+        if (!vehicle) return
+
+        if (mod.IsVehicleSeatOccupied(vehicle, 0)) {
+            return
+        }
+
+        const vPos = mod.GetVehicleState(
+            vehicle,
+            mod.VehicleStateVector.VehiclePosition
+        )
+        const pPos = mod.GetSoldierState(
+            player,
+            mod.SoldierStateVector.GetPosition
+        )
+
+        const dist = mod.DistanceBetween(pPos, vPos)
+
+        if (dist > 5.0) return
+
+        /* if (ctx.time - this.lastEnterTime < 5000) {
+            return
+        } */
+
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(222))
+
+        mod.ForcePlayerToSeat(player, vehicle, 0)
+        // this.lastEnterTime = ctx.time
     }
 }
 
@@ -1102,6 +1211,7 @@ export class CoreAI_Brain {
     public taskSelector: CoreAI_TaskSelector
 
     private debugWI: CoreAI_DebugWI | null = null
+    private actionRunner: CoreAI_ActionRunner
 
     constructor(
         player: mod.Player,
@@ -1114,6 +1224,10 @@ export class CoreAI_Brain {
         this.perception = new CoreAI_Perception()
         this.behaviorController = new CoreAI_BehaviorController(this)
         this.taskSelector = new CoreAI_TaskSelector(this, profile)
+        this.actionRunner = new CoreAI_ActionRunner([
+            new CoreAI_SetTargetAction(),
+            new CoreAI_EnterVehicleAction(),
+        ])
 
         if (enableDebug)
             this.debugWI = new CoreAI_DebugWI(
@@ -1171,6 +1285,7 @@ export class CoreAI_Brain {
         this.perception.reset()
         this.memory.reset()
         this.behaviorController.resetAll()
+        this.actionRunner.reset()
 
         if (mod.IsPlayerValid(this.player)) {
             mod.AISetTarget(this.player)
@@ -1182,6 +1297,7 @@ export class CoreAI_Brain {
      * ------------------------------------------------------------ */
 
     OnAIMoveFinished(success: boolean): void {
+        mod.DisplayHighlightedWorldLogMessage(mod.Message(123))
         this.memory.set('roamPos', null)
     }
 
@@ -1197,14 +1313,14 @@ export class CoreAI_Brain {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        fightSensor.onDamaged?.(
-            sensorCtx,
+        fightSensor.OnPlayerDamaged?.(
+            tickCtx,
             eventOtherPlayer,
             eventDamageType,
             eventWeaponUnlock
@@ -1219,13 +1335,13 @@ export class CoreAI_Brain {
         const fightSensor = this.getSensor(CoreAI_FightSensor)
         if (!fightSensor) return
 
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        fightSensor.onRayCastHit?.(sensorCtx, eventPoint, eventNormal)
+        fightSensor.OnRayCastHit?.(tickCtx, eventPoint, eventNormal)
     }
 
     /* ------------------------------------------------------------
@@ -1244,22 +1360,16 @@ export class CoreAI_Brain {
             return
         }
 
-        this.debugWI?.update()
+        this.debugWI?.tick()
 
-        const enemy = this.memory.get('closestEnemy')
-        if (enemy && mod.IsPlayerValid(enemy)) {
-            mod.AISetTarget(this.player, enemy)
-        } else {
-            mod.AISetTarget(this.player)
-        }
-
-        const sensorCtx: CoreAI_SensorContext = {
+        const tickCtx: CoreAI_TickContext = {
             player: this.player,
             memory: this.memory,
             time: this.memory.time,
         }
 
-        this.perception.update(sensorCtx)
+        this.perception.tick(tickCtx)
+        this.actionRunner.tick(tickCtx)
 
         const next = this.taskSelector.chooseNextBehavior()
 
@@ -1436,12 +1546,6 @@ export class CoreAI_FightBehavior extends CoreAI_ABehavior {
             await mod.Wait(0)
             mod.ForcePlayerToSeat(player, vehicle, 0)
 
-            /* mod.AIDefendPositionBehavior(
-                player,
-                mod.GetSoldierState(player, mod.SoldierStateVector.GetPosition),
-                0,
-                10
-            ) */
             mod.AIBattlefieldBehavior(player)
             return
         }
@@ -1515,8 +1619,7 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
         await mod.Wait(0)
         await mod.Wait(0)
         mod.ForcePlayerToSeat(player, vehicle, 0)
-        mod.AISetMoveSpeed(player, mod.MoveSpeed.Sprint)
-        // mod.AIBattlefieldBehavior(player)
+
         mod.AIDefendPositionBehavior(player, this.roamPos, 0, 4)
         // mod.AIValidatedMoveToBehavior(player, this.targetPos)
     }
@@ -1534,13 +1637,6 @@ export class CoreAI_MoveToBehavior extends CoreAI_ABehavior {
 
         const memPos = this.brain.memory.get('roamPos')
         if (!memPos) return
-
-        /* 
-        // Conflicts with other Scores
-        if (!mod.Equals(memPos, this.roamPos)) {
-            this.roamPos = memPos
-            this.enter()
-        } */
 
         const myPos = mod.GetObjectPosition(player)
         const dist = mod.DistanceBetween(myPos, this.roamPos)
@@ -1582,7 +1678,7 @@ export class CoreAI_ArrivalSensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const memory = ctx.memory
         const player = ctx.player
 
@@ -1662,7 +1758,7 @@ export class CoreAI_CapturePointMoveToSensor extends CoreAI_ASensor {
 
     override reset(): void {}
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
 
@@ -1741,7 +1837,7 @@ export class CoreAI_CapturePointSensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
 
@@ -1814,7 +1910,7 @@ export class CoreAI_ClosestEnemySensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
 
@@ -1830,7 +1926,6 @@ export class CoreAI_ClosestEnemySensor extends CoreAI_ASensor {
         if (!mod.IsPlayerValid(newEnemy)) {
             // Clear enemy memory (TTL = immediate)
             ctx.memory.set('closestEnemy', null)
-            // ctx.memory.set('roamPos', null)
             return
         }
 
@@ -1883,7 +1978,7 @@ export class CoreAI_RoamSensor extends CoreAI_ASensor {
         this.lastIntentDir = null
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         // Do not reselect while intent exists
         if (ctx.memory.get('roamPos')) {
             return
@@ -2039,7 +2134,7 @@ export class CoreAI_VehicleToDriveSensor extends CoreAI_ASensor {
         super(intervalMs)
     }
 
-    protected update(ctx: CoreAI_SensorContext): void {
+    protected update(ctx: CoreAI_TickContext): void {
         const player = ctx.player
         if (!mod.IsPlayerValid(player)) return
         if (mod.GetSoldierState(player, mod.SoldierStateBool.IsInVehicle)) {
@@ -2089,32 +2184,20 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
     constructor(options: CoreAI_BaseProfileOptions = {}) {
         super()
 
-        const getVehicleToDriveInfo = (brain: CoreAI_Brain) => {
-            const vehicle = brain.memory.get('vehicleToDrive')
-            if (!vehicle) return null
-
-            const vPos = mod.GetVehicleState(
-                vehicle,
-                mod.VehicleStateVector.VehiclePosition
-            )
-            const dist = mod.DistanceBetween(
-                mod.GetObjectPosition(brain.player),
-                vPos
-            )
-
-            return { vehicle, vPos, dist }
-        }
-
         this.scoring = [
             {
                 score: (brain) => (brain.memory.get('isInBattle') ? 200 : 0),
+
                 behaviorClass: () => CoreAI_FightBehavior,
+
                 factory: (brain) => new CoreAI_FightBehavior(brain),
             },
 
             {
                 score: (brain) => (brain.memory.get('closestEnemy') ? 150 : 0),
+
                 behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
@@ -2129,6 +2212,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
                     return mod.DistanceBetween(current.getTargetPos(), pos) <= 0
                 },
+
                 factory: (brain) => {
                     const enemy = brain.memory.get('closestEnemy')!
                     const pos = mod.GetSoldierState(
@@ -2147,59 +2231,50 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
             {
                 score: (brain) =>
                     brain.memory.get('vehicleToDrive') ? 290 : 0,
-                behaviorClass: (brain) => {
-                    const data = getVehicleToDriveInfo(brain)
-                    if (!data) return CoreAI_MoveToBehavior
-                    return data.dist <= 5.0
-                        ? CoreAI_EnterVehicleBehavior
-                        : CoreAI_MoveToBehavior
-                },
+
+                behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
-                    const data = getVehicleToDriveInfo(brain)
-                    if (!data) return false
+                    if (!(current instanceof CoreAI_MoveToBehavior))
+                        return false
 
-                    if (current instanceof CoreAI_EnterVehicleBehavior) {
-                        return data.dist <= 5.0
-                    }
+                    const vehicle = brain.memory.get('vehicleToDrive')
+                    if (!vehicle) return null
 
-                    if (current instanceof CoreAI_MoveToBehavior) {
-                        if (data.dist <= 5.0) return false
-                        return (
-                            mod.DistanceBetween(
-                                current.getTargetPos(),
-                                data.vPos
-                            ) <= 0
-                        )
-                    }
+                    const vPos = mod.GetVehicleState(
+                        vehicle,
+                        mod.VehicleStateVector.VehiclePosition
+                    )
 
-                    return false
+                    return (
+                        mod.DistanceBetween(current.getTargetPos(), vPos) <= 0
+                    )
                 },
-                factory: (brain) => {
-                    const data = getVehicleToDriveInfo(brain)!
 
-                    if (data.dist <= 5.0) {
-                        return new CoreAI_EnterVehicleBehavior(
-                            brain,
-                            data.vehicle,
-                            0,
-                            5.0
-                        )
-                    }
+                factory: (brain) => {
+                    const vehicle = brain.memory.get('vehicleToDrive')!
+
+                    const vPos = mod.GetVehicleState(
+                        vehicle,
+                        mod.VehicleStateVector.VehiclePosition
+                    )
 
                     return new CoreAI_MoveToBehavior(
                         brain,
-                        data.vPos,
+                        vPos,
                         Math.random() < 0.7
                             ? mod.MoveSpeed.Sprint
-                            : mod.MoveSpeed.Run,
-                        false
+                            : mod.MoveSpeed.Run
+                        /* false */
                     )
                 },
             },
 
             {
                 score: (brain) => (brain.memory.get('arrivedPos') ? 120 : 0),
+
                 behaviorClass: () => CoreAI_DefendBehavior,
+
                 factory: (brain) =>
                     new CoreAI_DefendBehavior(
                         brain,
@@ -2211,7 +2286,9 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
 
             {
                 score: (brain) => (brain.memory.get('roamPos') ? 20 : 0),
+
                 behaviorClass: () => CoreAI_MoveToBehavior,
+
                 isSame: (brain, current) => {
                     if (!(current instanceof CoreAI_MoveToBehavior))
                         return false
@@ -2224,6 +2301,7 @@ export class CoreAI_BaseProfile extends CoreAI_AProfile {
                         0
                     )
                 },
+
                 factory: (brain) => {
                     return new CoreAI_MoveToBehavior(
                         brain,
@@ -2353,14 +2431,15 @@ const infantryProfile: CoreAI_BaseProfile = new CoreAI_CombatantProfile({
         ttlMs: 10_000,
     },
     closestEnemySensor: {},
-    /* roamSensor: {
-                getWPs: () => PG_GameMode.getRangeWPs(1000, 1010),
-                ttlMs: 4_000,
-            }, */
+    roamSensor: {
+        getWPs: () => getRangeWPs(1001, 1003),
+        intervalMs: 1_000,
+        ttlMs: 4_000,
+    },
     vehicleToDriveSensor: {
         radius: 100,
     },
-    capturePointSensor: {},
+    // capturePointSensor: {},
 })
 
 const driverProfile: CoreAI_BaseProfile = new CoreAI_CombatantProfile({
@@ -2371,7 +2450,7 @@ const driverProfile: CoreAI_BaseProfile = new CoreAI_CombatantProfile({
         getWPs: () => getRangeWPs(1106, 1107),
         ttlMs: 60_000,
     },
-    capturePointSensor: {},
+    // capturePointSensor: {},
     /* arrivalSensor: {
                 getWPs: () => this.getRangeWPs(1106, 1107),
                 ttlMs: 20_000,
@@ -2402,6 +2481,12 @@ export function OnGameModeStarted(): void {
     mod.Wait(10).then(() => {
         spawnCustomBot(mod.GetTeam(1), mod.GetObjectPosition(mod.GetHQ(1)))
         spawnCustomBot(mod.GetTeam(2), mod.GetObjectPosition(mod.GetHQ(2)))
+    })
+
+    mod.Wait(10).then(() => {
+        mod.SetVehicleSpawnerAutoSpawn(mod.GetVehicleSpawner(1), true)
+        mod.SetVehicleSpawnerAutoSpawn(mod.GetVehicleSpawner(2), true)
+        mod.SetVehicleSpawnerAutoSpawn(mod.GetVehicleSpawner(4), true)
     })
 }
 
